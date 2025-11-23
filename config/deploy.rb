@@ -65,10 +65,24 @@ namespace :yarn do
 end
 
 namespace :deploy do
-  desc 'Restart pm2'
+  desc 'Start PM2 process for the first time'
+  task :start_pm2 do
+    on roles(:all) do
+      within current_path do
+        info 'Starting PM2 process: experience-art-client'
+        execute :pm2, 'start npm --name experience-art-client -- start'
+        execute :pm2, 'save'
+      end
+    end
+  end
+
+  desc 'Restart PM2 process'
   task :restart_pm2 do
     on roles(:all) do
-      execute :pm2, "restart experience-art-client"
+      within current_path do
+        info 'Restarting PM2 process: experience-art-client'
+        execute :pm2, 'restart experience-art-client'
+      end
     end
   end
 
