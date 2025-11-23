@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'experience-art-client',
-      script: 'npm',
+      script: './node_modules/.bin/next',
       args: 'start',
       cwd: '/var/www/experience.art.client/current',
       instances: 1,
@@ -19,7 +19,9 @@ module.exports = {
       log_file: '/var/www/experience.art.client/shared/log/pm2-combined.log',
       time: true,
       merge_logs: true,
-      interpreter: 'none'
+      kill_timeout: 5000,
+      wait_ready: false,
+      listen_timeout: 10000
     }
   ]
 };
