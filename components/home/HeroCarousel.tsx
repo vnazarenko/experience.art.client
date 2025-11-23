@@ -62,14 +62,24 @@ export function HeroCarousel({ experiences }: HeroCarouselProps) {
               index === currentIndex ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <Image
-              src={experience.primary_photo_url}
-              alt={experience.name}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority={index === 0}
-            />
+            {experience.primary_photo_url ? (
+              // Use regular img tag for Active Storage URLs to avoid Next.js proxy issues
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={experience.primary_photo_url}
+                alt={experience.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Image
+                src="/placeholder-experience.svg"
+                alt={experience.name}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={index === 0}
+              />
+            )}
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           </div>
@@ -80,10 +90,10 @@ export function HeroCarousel({ experiences }: HeroCarouselProps) {
       <div className="absolute inset-0 flex flex-col justify-end">
         <div className="container pb-12 md:pb-16">
           <div className="max-w-2xl">
-            <h2 className="heading-2 mb-3 text-white animate-fade-in">
+            <h2 className="heading-2 mb-3 animate-fade-in" style={{ color: '#ffffff' }}>
               {currentExperience.name}
             </h2>
-            <p className="body-large mb-4 text-white/90">
+            <p className="body-large mb-4" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
               by {currentExperience.artist_name}
             </p>
             <a

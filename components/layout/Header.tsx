@@ -11,21 +11,25 @@ export function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="heading-4 hover:text-[var(--color-accent-coral)] transition-colors">
-            Experience<span style={{ color: 'var(--color-accent-coral)' }}>.art</span>
+          <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
+            <img
+              src="https://cdn.prod.website-files.com/66964928eb5804f71f1456c1/66964928eb5804f71f145722_Experience%20Art%20Logo.png"
+              alt="Experience.art"
+              className="h-8 md:h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
               href="/experiences"
-              className="body-text hover:text-[var(--color-accent-coral)] transition-colors"
+              className="body-text text-[var(--color-secondary-text)] hover:text-[var(--color-primary-black)] transition-colors"
             >
               Experiences
             </Link>
             <Link
               href="/collections"
-              className="body-text hover:text-[var(--color-accent-coral)] transition-colors"
+              className="body-text text-[var(--color-secondary-text)] hover:text-[var(--color-primary-black)] transition-colors"
             >
               Collections
             </Link>
@@ -55,14 +59,14 @@ export function Header() {
           <nav className="md:hidden py-4 space-y-4 animate-slide-up">
             <Link
               href="/experiences"
-              className="block body-text hover:text-[var(--color-accent-coral)] transition-colors py-2"
+              className="block body-text text-[var(--color-secondary-text)] hover:text-[var(--color-primary-black)] transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
               Experiences
             </Link>
             <Link
               href="/collections"
-              className="block body-text hover:text-[var(--color-accent-coral)] transition-colors py-2"
+              className="block body-text text-[var(--color-secondary-text)] hover:text-[var(--color-primary-black)] transition-colors py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
               Collections
