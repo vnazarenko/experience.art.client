@@ -7,6 +7,7 @@ set :repo_url, 'git@github.com:vnazarenko/experience.art.client.git'
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 append :linked_files, '.env'
+append :linked_dirs, '.next/cache'
 
 set :ssh_options,
     verify_host_key: :always,
@@ -14,77 +15,81 @@ set :ssh_options,
 
 set :nvm_type, :user
 set :nvm_node, 'v22.2.0'
-set :nvm_map_bins, %w[node npm yarn]
 set :keep_releases, 5
 
 set :cache_path, ->{ File.join(shared_path, 'node_modules') }
 
-set :nvm_map_bins, %w{node yarn pm2}
+set :nvm_map_bins, %w{node npm pm2}
 
-namespace :yarn do
+namespace :npm do
+  task :install do
+    on roles(:all) do
+      within release_path do
+        execute :npm, 'ci --omit=dev'
+      end
+    end
+  end
+
   task :build do
-    on roles fetch(:yarn_roles) do
-      within fetch(:yarn_target_path, release_path) do
-        with fetch(:yarn_env_variables, {}) do
-          execute fetch(:yarn_bin), 'build'
-        end
+    on roles(:all) do
+      within release_path do
+        execute :npm, 'run build'
       end
     end
   end
 
-  task :load_cached_modules do
-    on roles fetch(:yarn_roles) do
-      within fetch(:yarn_target_path, release_path) do
-        with fetch(:yarn_env_variables, {}) do
-          if test("[ -d #{fetch(:cache_path)} ]")
-            execute :cp, '-a', fetch(:cache_path), 'node_modules'
-          else
-            execute :mkdir, '-p', fetch(:cache_path)
-          end
-        end
-      end
-    end
-  end
-
-  task :cache_modules do
-    on roles fetch(:yarn_roles) do
-      within fetch(:yarn_target_path, release_path) do
-        with fetch(:yarn_env_variables, {}) do
-          if test("[ -d #{fetch(:cache_path)} ]")
-            execute :rm, '-r', fetch(:cache_path)
-          end
-          execute :cp, '-a', 'node_modules', fetch(:cache_path)
-        end
-      end
-    end
-  end
-
-  before :install, :load_cached_modules
-  after :install, :cache_modules
   after :install, :build
 end
 
 namespace :deploy do
+  desc 'Verify .next directory exists'
+  task :verify_build do
+    on roles(:all) do
+      within release_path do
+        # Check if .next directory exists
+        unless test("[ -d .next ]")
+          error ".next directory not found! Build may have failed."
+          raise "Build verification failed: .next directory missing"
+        end
+
+        # Check if middleware-manifest.json exists
+        unless test("[ -f .next/server/middleware-manifest.json ]")
+          error "middleware-manifest.json not found! Build may have failed."
+          raise "Build verification failed: middleware-manifest.json missing"
+        end
+
+        info ".next directory verified successfully"
+      end
+    end
+  end
+
   desc 'Start PM2 process for the first time'
   task :start_pm2 do
     on roles(:all) do
       within current_path do
-        info 'Starting PM2 process: experience-art-client'
-        execute :pm2, 'start npm --name experience-art-client -- start'
+        info 'Starting PM2 process using ecosystem config'
+        execute :pm2, 'start ecosystem.config.js'
         execute :pm2, 'save'
       end
     end
   end
 
-  desc 'Restart PM2 process'
-  task :restart_pm2 do
+  desc 'Reload PM2 process'
+  task :reload_pm2 do
     on roles(:all) do
       within current_path do
-        info 'Restarting PM2 process: experience-art-client'
-        execute :pm2, 'restart experience-art-client'
+        info 'Reloading PM2 process: experience-art-client'
+        # Try to reload, if it fails, start fresh
+        if test("pm2 list | grep -q experience-art-client")
+          execute :pm2, 'reload ecosystem.config.js'
+        else
+          invoke 'deploy:start_pm2'
+        end
       end
     end
   end
 
-  before :cleanup, :restart_pm2
+  after 'npm:build', :verify_build
+  after :published, 'npm:install'
+  before :cleanup, :reload_pm2
 end

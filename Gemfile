@@ -10,5 +10,5 @@ group :development do
   gem 'net-ssh'
   gem 'bcrypt_pbkdf'
   gem 'capistrano-nvm'
-  gem 'capistrano-yarn'
+  gem 'capistrano-npm'
 end
