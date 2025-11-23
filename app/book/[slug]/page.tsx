@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api/client';
-import { ExperienceDetail, PriceCalculation } from '@/lib/types/experience';
+import { Experience } from '@/lib/types/experience';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -18,8 +18,8 @@ export default function BookingPage() {
   const startDate = searchParams.get('start') || '';
   const endDate = searchParams.get('end') || '';
 
-  const [experience, setExperience] = useState<ExperienceDetail | null>(null);
-  const [calculation, setCalculation] = useState<PriceCalculation | null>(null);
+  const [experience, setExperience] = useState<Experience | null>(null);
+  const [calculation, setCalculation] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,9 +45,11 @@ export default function BookingPage() {
         const [exp, calc] = await Promise.all([
           api.experiences.getBySlug(slug),
           api.experiences.calculate(slug, {
-            zip_code: zipCode,
-            start_date: startDate,
-            end_date: endDate,
+            destination_zip: zipCode,
+            from_date: startDate,
+            from_time: '09:00',
+            till_date: endDate,
+            till_time: '17:00',
           }),
         ]);
 
@@ -74,25 +76,21 @@ export default function BookingPage() {
       // Create a lock (reservation)
       const lockResponse = await api.locks.create({
         experience_id: experience.id,
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        address,
-        city,
-        state,
-        zip_code: zipCode,
-        start_date: startDate,
-        end_date: endDate,
-        total: calculation.total,
+        start_at: `${startDate}T09:00:00`,
+        ends_at: `${endDate}T17:00:00`,
+        amount_cents: Math.round(calculation.total_cents || calculation.total * 100),
+        customer_name: `${firstName} ${lastName}`,
+        contact_email: email,
+        contact_phone: phone,
+        customer_address: `${address}, ${city}, ${state} ${zipCode}`,
       });
 
       // Get the checkout session
       const checkoutSession = await api.locks.checkoutSession(lockResponse.client_token);
 
       // Redirect to Stripe checkout
-      if (checkoutSession.checkout_url) {
-        window.location.href = checkoutSession.checkout_url;
+      if (checkoutSession.url) {
+        window.location.href = checkoutSession.url;
       } else {
         throw new Error('Failed to create checkout session');
       }

@@ -1,0 +1,231 @@
+# Logfile created on 2025-11-23 21:12:45 +0100 by logger.rb/v1.7.0
+  INFO ---------------------------------------------------------------------------
+  INFO START 2025-11-23 21:12:45 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [b9a03dc9] Running /usr/bin/env mkdir -p /tmp/experience-art-client/ as deployer@investviews
+ DEBUG [b9a03dc9] Command: /usr/bin/env mkdir -p /tmp/experience-art-client/
+  INFO [b9a03dc9] Finished in 3.289 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/experience-art-client/nvm-exec.sh 0.0%
+  INFO Uploading /tmp/experience-art-client/nvm-exec.sh 100.0%
+  INFO [3c5c511f] Running /usr/bin/env chmod +x /tmp/experience-art-client/nvm-exec.sh as deployer@investviews
+ DEBUG [3c5c511f] Command: /usr/bin/env chmod +x /tmp/experience-art-client/nvm-exec.sh
+  INFO [3c5c511f] Finished in 0.255 seconds with exit status 0 (successful).
+ DEBUG [2ab7a2d5] Running [ -d $HOME/.nvm/v22.2.0 ] || [ -d $HOME/.nvm/versions/node/v22.2.0 ] as deployer@investviews
+ DEBUG [2ab7a2d5] Command: [ -d $HOME/.nvm/v22.2.0 ] || [ -d $HOME/.nvm/versions/node/v22.2.0 ]
+ DEBUG [2ab7a2d5] Finished in 0.251 seconds with exit status 0 (successful).
+  INFO [9d2316a4] Running /usr/bin/env mkdir -p /tmp as deployer@investviews
+ DEBUG [9d2316a4] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /tmp )
+  INFO [9d2316a4] Finished in 0.250 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-7ae5d89848a1788ed810.sh 0.0%
+  INFO Uploading /tmp/git-ssh-7ae5d89848a1788ed810.sh 100.0%
+  INFO [0dd35114] Running /usr/bin/env chmod 700 /tmp/git-ssh-7ae5d89848a1788ed810.sh as deployer@investviews
+ DEBUG [0dd35114] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env chmod 700 /tmp/git-ssh-7ae5d89848a1788ed810.sh )
+  INFO [0dd35114] Finished in 0.252 seconds with exit status 0 (successful).
+  INFO [ee22641f] Running /usr/bin/env git ls-remote git@github.com:vnazarenko/experience.art.client.git HEAD as deployer@investviews
+ DEBUG [ee22641f] Command: ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-7ae5d89848a1788ed810.sh" ; /usr/bin/env git ls-remote git@github.com:vnazarenko/experience.art.client.git HEAD )
+ DEBUG [ee22641f] 	6307e6441b47da9a44332f1768cb3f1a81487818	HEAD
+  INFO [ee22641f] Finished in 1.667 seconds with exit status 0 (successful).
+  INFO [f1c4cbf4] Running /usr/bin/env mkdir -p /var/www/experience.art.client/shared /var/www/experience.art.client/releases as deployer@investviews
+ DEBUG [f1c4cbf4] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/shared /var/www/experience.art.client/releases )
+  INFO [f1c4cbf4] Finished in 0.244 seconds with exit status 0 (successful).
+  INFO [5b31f4da] Running /usr/bin/env mkdir -p /var/www/experience.art.client/shared as deployer@investviews
+ DEBUG [5b31f4da] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/shared )
+  INFO [5b31f4da] Finished in 0.252 seconds with exit status 0 (successful).
+ DEBUG [f65dcb26] Running [ -f /var/www/experience.art.client/shared/.env ] as deployer@investviews
+ DEBUG [f65dcb26] Command: [ -f /var/www/experience.art.client/shared/.env ]
+ DEBUG [f65dcb26] Finished in 0.252 seconds with exit status 1 (failed).
+ ERROR linked file /var/www/experience.art.client/shared/.env does not exist on investviews
+  INFO ---------------------------------------------------------------------------
+  INFO START 2025-11-23 21:16:08 +0100 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [31ea4e2b] Running /usr/bin/env mkdir -p /tmp/experience-art-client/ as deployer@investviews
+ DEBUG [31ea4e2b] Command: /usr/bin/env mkdir -p /tmp/experience-art-client/
+  INFO [31ea4e2b] Finished in 1.092 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/experience-art-client/nvm-exec.sh 0.0%
+  INFO Uploading /tmp/experience-art-client/nvm-exec.sh 100.0%
+  INFO [28043f07] Running /usr/bin/env chmod +x /tmp/experience-art-client/nvm-exec.sh as deployer@investviews
+ DEBUG [28043f07] Command: /usr/bin/env chmod +x /tmp/experience-art-client/nvm-exec.sh
+  INFO [28043f07] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG [e2dc21f2] Running [ -d $HOME/.nvm/v22.2.0 ] || [ -d $HOME/.nvm/versions/node/v22.2.0 ] as deployer@investviews
+ DEBUG [e2dc21f2] Command: [ -d $HOME/.nvm/v22.2.0 ] || [ -d $HOME/.nvm/versions/node/v22.2.0 ]
+ DEBUG [e2dc21f2] Finished in 0.248 seconds with exit status 0 (successful).
+  INFO [678d6d35] Running /usr/bin/env mkdir -p /tmp as deployer@investviews
+ DEBUG [678d6d35] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /tmp )
+  INFO [678d6d35] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-d1d750d6de22457bd7c5.sh 0.0%
+  INFO Uploading /tmp/git-ssh-d1d750d6de22457bd7c5.sh 100.0%
+  INFO [44250a2c] Running /usr/bin/env chmod 700 /tmp/git-ssh-d1d750d6de22457bd7c5.sh as deployer@investviews
+ DEBUG [44250a2c] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env chmod 700 /tmp/git-ssh-d1d750d6de22457bd7c5.sh )
+  INFO [44250a2c] Finished in 0.253 seconds with exit status 0 (successful).
+  INFO [7ca874d9] Running /usr/bin/env git ls-remote git@github.com:vnazarenko/experience.art.client.git HEAD as deployer@investviews
+ DEBUG [7ca874d9] Command: ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git ls-remote git@github.com:vnazarenko/experience.art.client.git HEAD )
+ DEBUG [7ca874d9] 	6307e6441b47da9a44332f1768cb3f1a81487818	HEAD
+  INFO [7ca874d9] Finished in 1.551 seconds with exit status 0 (successful).
+  INFO [0470cc4f] Running /usr/bin/env mkdir -p /var/www/experience.art.client/shared /var/www/experience.art.client/releases as deployer@investviews
+ DEBUG [0470cc4f] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/shared /var/www/experience.art.client/releases )
+  INFO [0470cc4f] Finished in 0.238 seconds with exit status 0 (successful).
+  INFO [21fb5612] Running /usr/bin/env mkdir -p /var/www/experience.art.client/shared as deployer@investviews
+ DEBUG [21fb5612] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/shared )
+  INFO [21fb5612] Finished in 0.249 seconds with exit status 0 (successful).
+ DEBUG [742ab895] Running [ -f /var/www/experience.art.client/shared/.env ] as deployer@investviews
+ DEBUG [742ab895] Command: [ -f /var/www/experience.art.client/shared/.env ]
+ DEBUG [742ab895] Finished in 0.256 seconds with exit status 0 (successful).
+ DEBUG [d7446ae8] Running [ -f /var/www/experience.art.client/current/REVISION ] as deployer@investviews
+ DEBUG [d7446ae8] Command: [ -f /var/www/experience.art.client/current/REVISION ]
+ DEBUG [d7446ae8] Finished in 0.264 seconds with exit status 1 (failed).
+ DEBUG [040e2cb0] Running [ -f /var/www/experience.art.client/current/REVISION_TIME ] as deployer@investviews
+ DEBUG [040e2cb0] Command: [ -f /var/www/experience.art.client/current/REVISION_TIME ]
+ DEBUG [040e2cb0] Finished in 0.252 seconds with exit status 1 (failed).
+ DEBUG [d4a1434d] Running [ -f /var/www/experience.art.client/repo/HEAD ] as deployer@investviews
+ DEBUG [d4a1434d] Command: [ -f /var/www/experience.art.client/repo/HEAD ]
+ DEBUG [d4a1434d] Finished in 0.250 seconds with exit status 1 (failed).
+ DEBUG [b6708634] Running if test ! -d /var/www/experience.art.client; then echo "Directory does not exist '/var/www/experience.art.client'" 1>&2; false; fi as deployer@investviews
+ DEBUG [b6708634] Command: if test ! -d /var/www/experience.art.client; then echo "Directory does not exist '/var/www/experience.art.client'" 1>&2; false; fi
+ DEBUG [b6708634] Finished in 0.249 seconds with exit status 0 (successful).
+  INFO [cf6947de] Running /usr/bin/env git clone --mirror git@github.com:vnazarenko/experience.art.client.git /var/www/experience.art.client/repo as deployer@investviews
+ DEBUG [cf6947de] Command: cd /var/www/experience.art.client && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git clone --mirror git@github.com:vnazarenko/experience.art.client.git /var/www/experience.art.client/repo )
+ DEBUG [cf6947de] 	Cloning into bare repository '/var/www/experience.art.client/repo'...
+  INFO [cf6947de] Finished in 2.450 seconds with exit status 0 (successful).
+ DEBUG [c1b50698] Running if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi as deployer@investviews
+ DEBUG [c1b50698] Command: if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi
+ DEBUG [c1b50698] Finished in 0.250 seconds with exit status 0 (successful).
+  INFO [eaba5a05] Running /usr/bin/env git remote set-url origin git@github.com:vnazarenko/experience.art.client.git as deployer@investviews
+ DEBUG [eaba5a05] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git remote set-url origin git@github.com:vnazarenko/experience.art.client.git )
+  INFO [eaba5a05] Finished in 0.253 seconds with exit status 0 (successful).
+  INFO [c8b9f6cf] Running /usr/bin/env git remote update --prune as deployer@investviews
+ DEBUG [c8b9f6cf] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git remote update --prune )
+  INFO [c8b9f6cf] Finished in 1.797 seconds with exit status 0 (successful).
+ DEBUG [bcf59d15] Running if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi as deployer@investviews
+ DEBUG [bcf59d15] Command: if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi
+ DEBUG [bcf59d15] Finished in 0.251 seconds with exit status 0 (successful).
+  INFO [fb250fad] Running /usr/bin/env mkdir -p /var/www/experience.art.client/releases/20251123201614 as deployer@investviews
+ DEBUG [fb250fad] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env mkdir -p /var/www/experience.art.client/releases/20251123201614 )
+  INFO [fb250fad] Finished in 0.251 seconds with exit status 0 (successful).
+  INFO [2796b9b9] Running /usr/bin/env git archive main | /usr/bin/env tar -x -f - -C /var/www/experience.art.client/releases/20251123201614 as deployer@investviews
+ DEBUG [2796b9b9] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git archive main | /usr/bin/env tar -x -f - -C /var/www/experience.art.client/releases/20251123201614 )
+  INFO [2796b9b9] Finished in 0.264 seconds with exit status 0 (successful).
+ DEBUG [84864cdb] Running if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi as deployer@investviews
+ DEBUG [84864cdb] Command: if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi
+ DEBUG [84864cdb] Finished in 0.250 seconds with exit status 0 (successful).
+ DEBUG [c047e449] Running /usr/bin/env git rev-list --max-count=1 main as deployer@investviews
+ DEBUG [c047e449] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git rev-list --max-count=1 main )
+ DEBUG [c047e449] 	6307e6441b47da9a44332f1768cb3f1a81487818
+ DEBUG [c047e449] Finished in 0.252 seconds with exit status 0 (successful).
+ DEBUG [ae7e46b3] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [ae7e46b3] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [ae7e46b3] Finished in 0.253 seconds with exit status 0 (successful).
+  INFO [dd8940b8] Running /usr/bin/env echo "6307e6441b47da9a44332f1768cb3f1a81487818" > REVISION as deployer@investviews
+ DEBUG [dd8940b8] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /usr/bin/env echo "6307e6441b47da9a44332f1768cb3f1a81487818" > REVISION )
+  INFO [dd8940b8] Finished in 0.253 seconds with exit status 0 (successful).
+ DEBUG [7fb10411] Running if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi as deployer@investviews
+ DEBUG [7fb10411] Command: if test ! -d /var/www/experience.art.client/repo; then echo "Directory does not exist '/var/www/experience.art.client/repo'" 1>&2; false; fi
+ DEBUG [7fb10411] Finished in 0.252 seconds with exit status 0 (successful).
+ DEBUG [1cb9c8ce] Running /usr/bin/env git --no-pager log -1 --pretty=format:"%ct" main as deployer@investviews
+ DEBUG [1cb9c8ce] Command: cd /var/www/experience.art.client/repo && ( export NODE_VERSION="v22.2.0" GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-d1d750d6de22457bd7c5.sh" ; /usr/bin/env git --no-pager log -1 --pretty=format:"%ct" main )
+ DEBUG [1cb9c8ce] 	1763921131
+ DEBUG [1cb9c8ce] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG [ab0a5951] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [ab0a5951] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [ab0a5951] Finished in 0.252 seconds with exit status 0 (successful).
+  INFO [8d62e10c] Running /usr/bin/env echo "1763921131" > REVISION_TIME as deployer@investviews
+ DEBUG [8d62e10c] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /usr/bin/env echo "1763921131" > REVISION_TIME )
+  INFO [8d62e10c] Finished in 0.252 seconds with exit status 0 (successful).
+  INFO [7156829e] Running /usr/bin/env mkdir -p /var/www/experience.art.client/releases/20251123201614 as deployer@investviews
+ DEBUG [7156829e] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/releases/20251123201614 )
+  INFO [7156829e] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG [9fb6e7c6] Running [ -L /var/www/experience.art.client/releases/20251123201614/.env ] as deployer@investviews
+ DEBUG [9fb6e7c6] Command: [ -L /var/www/experience.art.client/releases/20251123201614/.env ]
+ DEBUG [9fb6e7c6] Finished in 0.250 seconds with exit status 1 (failed).
+ DEBUG [0f546714] Running [ -f /var/www/experience.art.client/releases/20251123201614/.env ] as deployer@investviews
+ DEBUG [0f546714] Command: [ -f /var/www/experience.art.client/releases/20251123201614/.env ]
+ DEBUG [0f546714] Finished in 0.251 seconds with exit status 1 (failed).
+  INFO [bf2a1ee0] Running /usr/bin/env ln -s /var/www/experience.art.client/shared/.env /var/www/experience.art.client/releases/20251123201614/.env as deployer@investviews
+ DEBUG [bf2a1ee0] Command: ( export NODE_VERSION="v22.2.0" ; /usr/bin/env ln -s /var/www/experience.art.client/shared/.env /var/www/experience.art.client/releases/20251123201614/.env )
+  INFO [bf2a1ee0] Finished in 0.254 seconds with exit status 0 (successful).
+ DEBUG [cc7ae7cb] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [cc7ae7cb] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [cc7ae7cb] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG [99f2b4d2] Running [ -d /var/www/experience.art.client/shared/node_modules ] as deployer@investviews
+ DEBUG [99f2b4d2] Command: [ -d /var/www/experience.art.client/shared/node_modules ]
+ DEBUG [99f2b4d2] Finished in 0.255 seconds with exit status 1 (failed).
+  INFO [18dc75c9] Running /usr/bin/env mkdir -p /var/www/experience.art.client/shared/node_modules as deployer@investviews
+ DEBUG [18dc75c9] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /usr/bin/env mkdir -p /var/www/experience.art.client/shared/node_modules )
+  INFO [18dc75c9] Finished in 0.250 seconds with exit status 0 (successful).
+ DEBUG [20016789] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [20016789] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [20016789] Finished in 0.254 seconds with exit status 0 (successful).
+  INFO [d3e12a9e] Running /tmp/experience-art-client/nvm-exec.sh yarn install --production as deployer@investviews
+ DEBUG [d3e12a9e] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /tmp/experience-art-client/nvm-exec.sh yarn install --production )
+ DEBUG [d3e12a9e] 	manpath: can't set the locale; make sure $LC_* and $LANG are correct
+ DEBUG [d3e12a9e] 	manpath: can't set the locale; make sure $LC_* and $LANG are correct
+ DEBUG [d3e12a9e] 	Now using node v22.2.0 (npm v10.7.0)
+ DEBUG [d3e12a9e] 	yarn install v1.22.22
+ DEBUG [d3e12a9e] 	info No lockfile found.
+ DEBUG [d3e12a9e] 	warning package-lock.json found. Your project contains lock files generated by tools other than Yarn. It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. To clear this warning, remove package-lock.json.
+ DEBUG [d3e12a9e] 	[1/4] Resolving packages...
+ DEBUG [d3e12a9e] 	[2/4] Fetching packages...
+ DEBUG [d3e12a9e] 	[3/4] Linking dependencies...
+ DEBUG [d3e12a9e] 	[4/4] Building fresh packages...
+ DEBUG [d3e12a9e] 	success Saved lockfile.
+ DEBUG [d3e12a9e] 	Done in 10.96s.
+  INFO [d3e12a9e] Finished in 11.638 seconds with exit status 0 (successful).
+ DEBUG [1a42e97f] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [1a42e97f] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [1a42e97f] Finished in 0.251 seconds with exit status 0 (successful).
+ DEBUG [8a0b9875] Running [ -d /var/www/experience.art.client/shared/node_modules ] as deployer@investviews
+ DEBUG [8a0b9875] Command: [ -d /var/www/experience.art.client/shared/node_modules ]
+ DEBUG [8a0b9875] Finished in 0.252 seconds with exit status 0 (successful).
+  INFO [90dad113] Running /usr/bin/env rm -r /var/www/experience.art.client/shared/node_modules as deployer@investviews
+ DEBUG [90dad113] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /usr/bin/env rm -r /var/www/experience.art.client/shared/node_modules )
+  INFO [90dad113] Finished in 0.261 seconds with exit status 0 (successful).
+  INFO [73df22a8] Running /usr/bin/env cp -a node_modules /var/www/experience.art.client/shared/node_modules as deployer@investviews
+ DEBUG [73df22a8] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /usr/bin/env cp -a node_modules /var/www/experience.art.client/shared/node_modules )
+  INFO [73df22a8] Finished in 0.706 seconds with exit status 0 (successful).
+ DEBUG [0ec51816] Running if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi as deployer@investviews
+ DEBUG [0ec51816] Command: if test ! -d /var/www/experience.art.client/releases/20251123201614; then echo "Directory does not exist '/var/www/experience.art.client/releases/20251123201614'" 1>&2; false; fi
+ DEBUG [0ec51816] Finished in 0.250 seconds with exit status 0 (successful).
+  INFO [b800c998] Running /tmp/experience-art-client/nvm-exec.sh yarn build as deployer@investviews
+ DEBUG [b800c998] Command: cd /var/www/experience.art.client/releases/20251123201614 && ( export NODE_VERSION="v22.2.0" ; /tmp/experience-art-client/nvm-exec.sh yarn build )
+ DEBUG [b800c998] 	manpath: can't set the locale; make sure $LC_* and $LANG are correct
+ DEBUG [b800c998] 	manpath: can't set the locale; make sure $LC_* and $LANG are correct
+ DEBUG [b800c998] 	Now using node v22.2.0 (npm v10.7.0)
+ DEBUG [b800c998] 	yarn run v1.22.22
+ DEBUG [b800c998] 	$ next build
+ DEBUG [b800c998] 	 ⚠ Installing TypeScript as it was not found while loading "next.config.ts".
+ DEBUG [b800c998] 	
+ DEBUG [b800c998] 	Installing devDependencies (yarn):
+ DEBUG [b800c998] 	- typescript
+ DEBUG [b800c998] 	
+ DEBUG [b800c998] 	warning package-lock.json found. Your project contains lock files generated by tools other than Yarn. It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. To clear this warning, remove package-lock.json.
+ DEBUG [b800c998] 	[1/4] Resolving packages...
+ DEBUG [b800c998] 	[2/4] Fetching packages...
+ DEBUG [b800c998] 	[3/4] Linking dependencies...
+ DEBUG [b800c998] 	[4/4] Building fresh packages...
+ DEBUG [b800c998] 	success Saved lockfile.
+ DEBUG [b800c998] 	success Saved 1 new dependency.
+ DEBUG [b800c998] 	info Direct dependencies
+ DEBUG [b800c998] 	└─ typescript@5.9.3
+ DEBUG [b800c998] 	info All dependencies
+ DEBUG [b800c998] 	└─ typescript@5.9.3
+ DEBUG [b800c998] 	
+ DEBUG [b800c998] 	   ▲ Next.js 16.0.3 (Turbopack)
+ DEBUG [b800c998] 	   - Environments: .env
+ DEBUG [b800c998] 	
+ DEBUG [b800c998] 	   Creating an optimized production build ...
+ DEBUG [b800c998] 	 ✓ Compiled successfully in 1484.6ms
+ DEBUG [b800c998] 	   Running TypeScript ...
+ DEBUG [b800c998] 	Failed to compile.
+
+ DEBUG [b800c998] 	./app/book/[slug]/page.tsx:6:10
+Type error: Module '"@/lib/types/experience"' has no exported member 'ExperienceDetail'.
+
+[0m [90m 4 |[39m [36mimport[39m { useParams[33m,[39m useSearchParams[33m,[39m useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { api } [36mfrom[39m [32m'@/lib/api/client'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mExperienceDetail[39m[33m,[39m [33mPriceCalculation[39m } [36mfrom[39m [32m'@/lib/types/experience'[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mInput[39m } [36mfrom[39m [32m'@/components/ui/Input'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/Button'[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mCard[39m } [36mfrom[39m [32m'@/components/ui/Card'[39m[33m;[39m[0m
+ DEBUG [b800c998] 	Next.js build worker exited with code: 1 and signal: null
+ DEBUG [b800c998] 	error Command failed with exit code 1.
+ DEBUG [b800c998] 	info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

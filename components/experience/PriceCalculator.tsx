@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { api } from '@/lib/api/client';
-import { PriceCalculation } from '@/lib/types/experience';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -17,7 +16,7 @@ export function PriceCalculator({ experienceId, experienceSlug }: PriceCalculato
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [loading, setLoading] = useState(false);
-  const [calculation, setCalculation] = useState<PriceCalculation | null>(null);
+  const [calculation, setCalculation] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleCalculate = async (e: React.FormEvent) => {
@@ -27,9 +26,11 @@ export function PriceCalculator({ experienceId, experienceSlug }: PriceCalculato
 
     try {
       const result = await api.experiences.calculate(experienceId, {
-        zip_code: zipCode,
-        start_date: startDate,
-        end_date: endDate,
+        destination_zip: zipCode,
+        from_date: startDate,
+        from_time: '09:00',
+        till_date: endDate,
+        till_time: '17:00',
       });
       setCalculation(result);
     } catch (err) {
