@@ -70,15 +70,16 @@ export const api = {
     },
 
     search: (query: string) => {
-      return fetchApi<any[]>(`/api/v1/experiences/search?q=${encodeURIComponent(query)}`);
+      // Search is now handled by list with ?q= parameter
+      return fetchApi<any[]>(`/api/v1/experiences?q=${encodeURIComponent(query)}`);
     },
 
     getBySlug: (slug: string) => {
-      return fetchApi<any>(`/experience/${slug}`);
+      return fetchApi<any>(`/api/v1/experiences/${slug}`);
     },
 
     getPhotos: (id: number | string) => {
-      return fetchApi<any[]>(`/experience/${id}/photos`);
+      return fetchApi<any[]>(`/api/v1/experiences/${id}/photos`);
     },
 
     calculate: (id: number | string, params: {
@@ -93,7 +94,7 @@ export const api = {
         formData.append(key, value);
       });
 
-      return fetchApi<any>(`/experience/${id}/calculate`, {
+      return fetchApi<any>(`/api/v1/experiences/${id}/calculate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -104,7 +105,7 @@ export const api = {
 
     getAvailableDates: (id: number | string, params: { from: string; to: string }) => {
       const queryParams = new URLSearchParams(params);
-      return fetchApi<any>(`/experience/${id}/available_dates?${queryParams.toString()}`);
+      return fetchApi<any>(`/api/v1/experiences/${id}/available_dates?${queryParams.toString()}`);
     },
   },
 

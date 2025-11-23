@@ -2,14 +2,14 @@
 
 export function PhotoGridBackground() {
   const photos = [
-    '/design/landing-photos/Badillac.png',
-    '/design/landing-photos/Bonsai Baum.png',
-    '/design/landing-photos/Eiro.jpg',
-    '/design/landing-photos/Heathen.png',
-    '/design/landing-photos/Kalliope.png',
-    '/design/landing-photos/Lady Buggies.png',
-    '/design/landing-photos/Orb.png',
-    '/design/landing-photos/Star Flu.png',
+    '/landing-photos/Badillac.png',
+    '/landing-photos/Bonsai Baum.png',
+    '/landing-photos/Eiro.jpg',
+    '/landing-photos/Heathen.png',
+    '/landing-photos/Kalliope.png',
+    '/landing-photos/Lady Buggies.png',
+    '/landing-photos/Orb.png',
+    '/landing-photos/Star Flu.png',
   ];
 
   return (

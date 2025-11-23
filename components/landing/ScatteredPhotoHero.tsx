@@ -63,7 +63,7 @@ export function ScatteredPhotoHero() {
   const photoPositions: PhotoPosition[] = [
     // Top left area
     {
-      src: '/design/landing-photos/Eiro.jpg',
+      src: '/landing-photos/Eiro.jpg',
       alt: 'Art installation',
       desktop: { top: '5%', left: '3%', width: '20%', rotation: -8 },
       tablet: { top: '8%', left: '2%', width: '24%', rotation: -6 },
@@ -73,7 +73,7 @@ export function ScatteredPhotoHero() {
     },
     // Top right area
     {
-      src: '/design/landing-photos/Heathen.png',
+      src: '/landing-photos/Heathen.png',
       alt: 'Art installation',
       desktop: { top: '8%', left: '75%', width: '22%', rotation: 6 },
       tablet: { top: '12%', left: '72%', width: '26%', rotation: 8 },
@@ -83,7 +83,7 @@ export function ScatteredPhotoHero() {
     },
     // Middle left
     {
-      src: '/design/landing-photos/Kalliope.png',
+      src: '/landing-photos/Kalliope.png',
       alt: 'Art installation',
       desktop: { top: '35%', left: '5%', width: '18%', rotation: 4 },
       tablet: { top: '38%', left: '3%', width: '22%', rotation: 5 },
@@ -93,7 +93,7 @@ export function ScatteredPhotoHero() {
     },
     // Middle right
     {
-      src: '/design/landing-photos/Badillac.png',
+      src: '/landing-photos/Badillac.png',
       alt: 'Art installation',
       desktop: { top: '30%', left: '78%', width: '19%', rotation: -5 },
       tablet: { top: '35%', left: '75%', width: '23%', rotation: -6 },
@@ -103,7 +103,7 @@ export function ScatteredPhotoHero() {
     },
     // Bottom left
     {
-      src: '/design/landing-photos/Bonsai Baum.png',
+      src: '/landing-photos/Bonsai Baum.png',
       alt: 'Art installation',
       desktop: { top: '65%', left: '2%', width: '23%', rotation: -4 },
       tablet: { top: '68%', left: '1%', width: '27%', rotation: -5 },
@@ -113,7 +113,7 @@ export function ScatteredPhotoHero() {
     },
     // Bottom right
     {
-      src: '/design/landing-photos/Lady Buggies.png',
+      src: '/landing-photos/Lady Buggies.png',
       alt: 'Art installation',
       desktop: { top: '68%', left: '73%', width: '24%', rotation: 7 },
       tablet: { top: '70%', left: '70%', width: '28%', rotation: 8 },
@@ -123,7 +123,7 @@ export function ScatteredPhotoHero() {
     },
     // Bottom center (moved down and right)
     {
-      src: '/design/landing-photos/Orb.png',
+      src: '/landing-photos/Orb.png',
       alt: 'Art installation',
       desktop: { top: '72%', left: '42%', width: '16%', rotation: -3 },
       tablet: { top: '75%', left: '40%', width: '18%', rotation: -4 },
@@ -133,7 +133,7 @@ export function ScatteredPhotoHero() {
     },
     // Top center (smaller accent)
     {
-      src: '/design/landing-photos/Star Flu.png',
+      src: '/landing-photos/Star Flu.png',
       alt: 'Art installation',
       desktop: { top: '5%', left: '42%', width: '15%', rotation: 5 },
       tablet: { top: '6%', left: '41%', width: '18%', rotation: 6 },
