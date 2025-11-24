@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { BuildInfo } from "@/components/BuildInfo";
+import { getBuildString } from "@/lib/build-info";
 
 export const metadata: Metadata = {
   title: "Experience.art - Immersive Art Experiences",
   description: "A marketplace of radical, immersive, and experiential art forms. Book unique performances and installations brought to your location.",
+  other: {
+    'build-info': getBuildString(),
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +26,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <BuildInfo />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-1">

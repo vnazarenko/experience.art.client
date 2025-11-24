@@ -22,6 +22,27 @@ set :cache_path, ->{ File.join(shared_path, 'node_modules') }
 set :nvm_map_bins, %w{node npm pm2}
 
 namespace :npm do
+  desc 'Generate build information'
+  task :generate_build_info do
+    on roles(:all) do
+      within release_path do
+        # Get git commit hash
+        git_commit = capture(:git, 'rev-parse', '--short', 'HEAD').strip
+
+        # Generate build ID (timestamp + short commit)
+        build_time = Time.now.utc.iso8601
+        build_id = "#{Time.now.utc.strftime('%Y%m%d%H%M%S')}-#{git_commit}"
+
+        # Create .env.production.local with build info
+        execute :echo, "\"NEXT_PUBLIC_BUILD_TIME=#{build_time}\" > .env.production.local"
+        execute :echo, "\"NEXT_PUBLIC_BUILD_ID=#{build_id}\" >> .env.production.local"
+        execute :echo, "\"NEXT_PUBLIC_GIT_COMMIT=#{git_commit}\" >> .env.production.local"
+
+        info "Build info generated: #{build_id}"
+      end
+    end
+  end
+
   task :install do
     on roles(:all) do
       within release_path do
@@ -38,6 +59,7 @@ namespace :npm do
     end
   end
 
+  before :build, :generate_build_info
   after :install, :build
 end
 
