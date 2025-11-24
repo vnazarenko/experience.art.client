@@ -78,24 +78,35 @@ namespace :deploy do
   task :reload_pm2 do
     on roles(:all) do
       # Always execute from home directory to avoid cwd issues
-      within fetch(:deploy_to) do
-        info 'Reloading PM2 process: experience-art-client'
+      info 'Reloading PM2 process: experience-art-client'
 
-        # Delete existing process if it exists (avoids cwd issues)
+      # Delete existing process if it exists (avoids cwd issues)
+
+      # Start fresh from current symlink
+      within current_path do
         if test("pm2 list 2>/dev/null | grep -q experience-art-client")
           execute :pm2, 'delete experience-art-client || true'
         end
 
-        # Start fresh from current symlink
-        within current_path do
-          execute :pm2, 'start ecosystem.config.js'
-          execute :pm2, 'save'
-        end
+        execute :pm2, 'start ecosystem.config.js'
+        execute :pm2, 'save'
       end
     end
   end
 
-  # after 'npm:build', :verify_build
+  desc 'Restart PM2 process'
+  task :restart_pm2 do
+    on roles(:all) do
+      # Always execute from home directory to avoid cwd issues
+      within current_path do
+        info 'Restarting PM2 process: experience-art-client'
+        # Start fresh from current symlink
+        execute :pm2, 'restart ecosystem.config.js'
+      end
+    end
+  end
+
+  # after 'npm:build', :vn erify_build
   after :published, 'npm:install'
-  before :cleanup, :reload_pm2
+  before :cleanup, :restart_pm2
 end

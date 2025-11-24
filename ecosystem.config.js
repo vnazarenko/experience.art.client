@@ -4,7 +4,8 @@ module.exports = {
       name: 'experience-art-client',
       script: './node_modules/.bin/next',
       args: 'start',
-      cwd: '/var/www/experience.art.client/current',
+      // Use relative cwd - PM2 will be started from the current directory
+      cwd: process.cwd(),
       instances: 1,
       exec_mode: 'fork',
       autorestart: true,
