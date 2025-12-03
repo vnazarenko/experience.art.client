@@ -118,7 +118,7 @@ export function BuildYourEvent() {
                 return (
                   <div
                     key={sectionKey}
-                    className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-8"
+                    className="bg-primary-charcoal rounded-2xl border border-white/10 p-8"
                   >
                     <div className="mb-6">
                       <h3 className="text-2xl font-bold text-white mb-2">
@@ -167,7 +167,7 @@ export function BuildYourEvent() {
 
           {/* Right Column - Summary Panel */}
           <div className="lg:col-span-1">
-            <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-8 sticky top-8">
+            <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-8 sticky top-8">
               <h3 className="text-xl font-bold text-white uppercase tracking-widest mb-6">
                 Your Event Summary
               </h3>
@@ -278,7 +278,7 @@ export function BuildYourEvent() {
                   {/* Info */}
                   <div className="mt-6 pt-6 border-t border-white/10">
                     <p className="text-white/60 text-xs leading-relaxed">
-                      Based on your selections, we'll recommend specific artists
+                      Based on your selections, we&apos;ll recommend specific artists
                       and experiences that match your vision and budget.
                     </p>
                   </div>
@@ -311,7 +311,7 @@ export function BuildYourEvent() {
               ].map((artist, index) => (
                 <div
                   key={index}
-                  className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-8 hover:border-white/30 transition-all duration-300"
+                  className="bg-primary-charcoal rounded-2xl border border-white/10 p-8 hover:border-white/30 transition-all duration-300"
                   style={{
                     boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
                   }}

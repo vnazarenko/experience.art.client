@@ -5,12 +5,13 @@ import { MoodboardPicker } from "@/components/landing-v3/MoodboardPicker";
 import { AIAutoFilter } from "@/components/landing-v3/AIAutoFilter";
 import { ExperienceQuiz } from "@/components/landing-v3/ExperienceQuiz";
 import { DynamicSmartFilters } from "@/components/landing-v3/DynamicSmartFilters";
-import { BuildYourEvent } from "@/components/landing-v3/BuildYourEvent";
+// import { BuildYourEvent } from "@/components/landing-v3/BuildYourEvent";
 import { CollectionGrid } from "@/components/landing-v3/CollectionGrid";
 import { TopSellersGrid } from "@/components/landing-v3/TopSellersGrid";
 import { AIFinder } from "@/components/landing-v3/AIFinder";
 import { FinalCTA } from "@/components/landing-v3/FinalCTA";
 import { api } from "@/lib/api/client";
+import { BuildYourEventV2 } from "@/components/landing-v3/BuildYourEventV2";
 
 export const metadata = {
   title: "Find Your Next Experience - Experience.art",
@@ -46,7 +47,7 @@ export default async function LandingV3() {
       <hr className="w-full text-white"/>
       <DynamicSmartFilters />
       <hr className="w-full text-white"/>
-      <BuildYourEvent />
+      <BuildYourEventV2 />
       <hr className="w-full text-white"/>
       <CollectionGrid />
       <TopSellersGrid experiences={topExperiences} />

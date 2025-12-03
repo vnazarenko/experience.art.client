@@ -44,6 +44,12 @@ const mockExperiences = [
 
 export function MoodboardPicker() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showExperiences, setShowExperiences] = useState(false);
+
+  // Custom input states for each category
+  const [customVisualStyle, setCustomVisualStyle] = useState("");
+  const [customAtmosphere, setCustomAtmosphere] = useState("");
+  const [customColorVibe, setCustomColorVibe] = useState("");
 
   const toggleTag = (tagId: string) => {
     setSelectedTags((prev) =>
@@ -59,7 +65,21 @@ export function MoodboardPicker() {
 
   const clearAll = () => {
     setSelectedTags([]);
+    setCustomVisualStyle("");
+    setCustomAtmosphere("");
+    setCustomColorVibe("");
+    setShowExperiences(false);
   };
+
+  const handleShowExperiences = () => {
+    setShowExperiences(true);
+  };
+
+  // Check if user has any selection (tags or custom inputs)
+  const hasAnySelection = selectedTags.length > 0 ||
+    customVisualStyle.trim() !== "" ||
+    customAtmosphere.trim() !== "" ||
+    customColorVibe.trim() !== "";
 
   const getTagLabel = (tagId: string): string => {
     const allTags = [...visualStyles, ...atmospheres, ...colorVibes];
@@ -81,34 +101,38 @@ export function MoodboardPicker() {
           </p>
         </div>
 
-        {/* Selected Tags */}
-        {selectedTags.length > 0 && (
-          <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6 mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-bold uppercase tracking-widest text-sm">
-                Your Selection ({selectedTags.length})
-              </h3>
+        {/* Selected Tags - Always visible */}
+        <div className="bg-primary-charcoal rounded-xl border border-white/10 p-4 mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-white font-bold uppercase tracking-widest text-xs">
+              Your Selection {selectedTags.length > 0 && `(${selectedTags.length})`}
+            </h3>
+            {selectedTags.length > 0 && (
               <button
                 onClick={clearAll}
-                className="text-white/60 hover:text-white text-sm uppercase tracking-widest transition-colors duration-300"
+                className="text-white/60 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300"
               >
                 Clear All
               </button>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {selectedTags.map((tagId) => (
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2 min-h-8">
+            {selectedTags.length > 0 ? (
+              selectedTags.map((tagId) => (
                 <button
                   key={tagId}
                   onClick={() => removeTag(tagId)}
-                  className="px-4 py-2 rounded-full bg-white text-black font-bold text-sm flex items-center gap-2 hover:bg-white/90 transition-all duration-300"
+                  className="px-3 py-1 rounded-full bg-white text-black font-bold text-xs flex items-center gap-1.5 hover:bg-white/90 transition-all duration-300"
                 >
                   {getTagLabel(tagId)}
-                  <span className="text-lg leading-none">×</span>
+                  <span className="text-sm leading-none">×</span>
                 </button>
-              ))}
-            </div>
+              ))
+            ) : (
+              <span className="text-white/30 text-sm">Select tags below to build your moodboard...</span>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Visual Style Section */}
         <div className="mb-10">
@@ -120,7 +144,7 @@ export function MoodboardPicker() {
               <button
                 key={tag.id}
                 onClick={() => toggleTag(tag.id)}
-                className={`px-6 py-3 rounded-full border transition-all duration-300 font-bold uppercase tracking-wide text-sm ${
+                className={`w-24 h-11 md:w-28 md:h-11 rounded-xl border transition-all duration-300 font-bold uppercase tracking-wide text-xs flex items-center justify-center text-center p-2 ${
                   selectedTags.includes(tag.id)
                     ? "bg-white text-black border-white"
                     : "bg-transparent text-white border-white/30 hover:border-white"
@@ -134,6 +158,16 @@ export function MoodboardPicker() {
                 {tag.label}
               </button>
             ))}
+          </div>
+          {/* Custom input */}
+          <div className="mt-4">
+            <input
+              type="text"
+              placeholder="Or describe your visual style..."
+              value={customVisualStyle}
+              onChange={(e) => setCustomVisualStyle(e.target.value)}
+              className="w-full bg-transparent text-white placeholder-white/40 px-4 py-3 rounded-xl border border-white/10 hover:border-white/30 focus:border-white outline-none transition-all duration-300 text-sm"
+            />
           </div>
         </div>
 
@@ -147,7 +181,7 @@ export function MoodboardPicker() {
               <button
                 key={tag.id}
                 onClick={() => toggleTag(tag.id)}
-                className={`px-6 py-3 rounded-full border transition-all duration-300 font-bold uppercase tracking-wide text-sm ${
+                className={`w-24 h-11 md:w-28 md:h-11 rounded-xl border transition-all duration-300 font-bold uppercase tracking-wide text-xs flex items-center justify-center text-center p-2 ${
                   selectedTags.includes(tag.id)
                     ? "bg-white text-black border-white"
                     : "bg-transparent text-white border-white/30 hover:border-white"
@@ -161,6 +195,16 @@ export function MoodboardPicker() {
                 {tag.label}
               </button>
             ))}
+          </div>
+          {/* Custom input */}
+          <div className="mt-4">
+            <input
+              type="text"
+              placeholder="Or describe your atmosphere..."
+              value={customAtmosphere}
+              onChange={(e) => setCustomAtmosphere(e.target.value)}
+              className="w-full bg-transparent text-white placeholder-white/40 px-4 py-3 rounded-xl border border-white/10 hover:border-white/30 focus:border-white outline-none transition-all duration-300 text-sm"
+            />
           </div>
         </div>
 
@@ -174,7 +218,7 @@ export function MoodboardPicker() {
               <button
                 key={tag.id}
                 onClick={() => toggleTag(tag.id)}
-                className={`px-6 py-3 rounded-full border transition-all duration-300 font-bold uppercase tracking-wide text-sm ${
+                className={`w-24 h-11 md:w-28 md:h-11 rounded-xl border transition-all duration-300 font-bold uppercase tracking-wide text-xs flex items-center justify-center text-center p-2 ${
                   selectedTags.includes(tag.id)
                     ? "bg-white text-black border-white"
                     : "bg-transparent text-white border-white/30 hover:border-white"
@@ -189,24 +233,35 @@ export function MoodboardPicker() {
               </button>
             ))}
           </div>
+          {/* Custom input */}
+          <div className="mt-4">
+            <input
+              type="text"
+              placeholder="Or describe your color vibe..."
+              value={customColorVibe}
+              onChange={(e) => setCustomColorVibe(e.target.value)}
+              className="w-full bg-transparent text-white placeholder-white/40 px-4 py-3 rounded-xl border border-white/10 hover:border-white/30 focus:border-white outline-none transition-all duration-300 text-sm"
+            />
+          </div>
         </div>
 
         {/* Show Experiences Button */}
         <div className="flex justify-center mt-12">
           <button
-            disabled={selectedTags.length === 0}
+            onClick={handleShowExperiences}
+            disabled={!hasAnySelection}
             className={`px-12 py-4 rounded-full font-bold uppercase tracking-widest text-lg transition-all duration-300 ${
-              selectedTags.length > 0
+              hasAnySelection
                 ? "bg-white text-black hover:bg-white/90"
                 : "bg-white/20 text-white/40 cursor-not-allowed"
             }`}
           >
-            Show Experiences {matchCount > 0 && `(${matchCount})`}
+            Show Experiences {hasAnySelection && `(${matchCount})`}
           </button>
         </div>
 
-        {/* Results Preview */}
-        {selectedTags.length > 0 && (
+        {/* Results Preview - Only shown after clicking button */}
+        {showExperiences && hasAnySelection && (
           <div className="mt-16">
             <h3 className="text-white text-2xl font-bold uppercase tracking-widest mb-8 text-center">
               Matched Experiences
@@ -215,7 +270,7 @@ export function MoodboardPicker() {
               {mockExperiences.map((exp) => (
                 <div
                   key={exp.id}
-                  className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group"
+                  className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group"
                   style={{
                     boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
                   }}

@@ -9,7 +9,7 @@ export function AIFinder() {
         </p>
 
         <div
-          className="bg-[#1a1a1a] border border-white/20 rounded-2xl p-8 transition-all duration-300"
+          className="bg-primary-charcoal border border-white/20 rounded-2xl p-8 transition-all duration-300"
           style={{
             boxShadow: '0 0 60px rgba(255, 255, 255, 0.05)'
           }}

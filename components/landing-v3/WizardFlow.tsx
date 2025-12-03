@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SectionContainer } from "../landing-shared/SectionContainer";
 
-type EventType = "birthday" | "corporate" | "wedding" | "festival" | null;
+type EventType = "birthday" | "corporate" | "wedding" | "festival" | "custom" | null;
 type Vibe =
   | "wow"
   | "futuristic"
@@ -11,14 +11,96 @@ type Vibe =
   | "epic"
   | "calm"
   | "interactive"
+  | "custom"
   | null;
-type Budget = "under1k" | "1k-5k" | "5k-20k" | "20k+" | null;
+type Budget = "under1k" | "1k-5k" | "5k-20k" | "20k+" | "custom" | null;
+
+// Custom SVG icons for event types - Abstract-emotional design approach
+
+// Champagne Toast - elegant adult celebration
+const BirthdayIcon = () => (
+  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
+    {/* Left glass */}
+    <path d="M8 28l4-14 2 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <ellipse cx="11" cy="11" rx="3" ry="4" stroke="currentColor" strokeWidth="2"/>
+    {/* Right glass */}
+    <path d="M24 28l-4-14-2 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <ellipse cx="21" cy="11" rx="3" ry="4" stroke="currentColor" strokeWidth="2"/>
+    {/* Bubbles */}
+    <circle cx="16" cy="6" r="1.5" fill="currentColor"/>
+    <circle cx="14" cy="3" r="1" fill="currentColor"/>
+    <circle cx="18" cy="4" r="1" fill="currentColor"/>
+  </svg>
+);
+
+// Network Nodes - modern professional connections
+const CorporateIcon = () => (
+  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
+    {/* Central node */}
+    <circle cx="16" cy="16" r="3" stroke="currentColor" strokeWidth="2"/>
+    {/* Surrounding nodes */}
+    <circle cx="16" cy="5" r="2" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="25" cy="10" r="2" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="25" cy="22" r="2" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="16" cy="27" r="2" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="7" cy="22" r="2" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="7" cy="10" r="2" stroke="currentColor" strokeWidth="2"/>
+    {/* Connection lines */}
+    <path d="M16 7v6M23 11l-5 3M23 21l-5-3M16 25v-6M9 21l5-3M9 11l5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+// Intertwined Forms - romantic union, infinity-inspired
+const WeddingIcon = () => (
+  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
+    {/* Intertwined flowing curves - infinity/union symbol */}
+    <path
+      d="M6 16c0-4 3-7 6-7s5 2 5 5-2 5-5 5c-2 0-4-1-5-3"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    <path
+      d="M26 16c0 4-3 7-6 7s-5-2-5-5 2-5 5-5c2 0 4 1 5 3"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    {/* Small heart accent at center */}
+    <path
+      d="M16 14l-1.5-1.5a1.5 1.5 0 112.1 0L16 14l1.4-1.5a1.5 1.5 0 10-2.1 0L16 14z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+// Radiating Sound Waves - collective energy, immersive experience
+const FestivalIcon = () => (
+  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
+    {/* Base point */}
+    <circle cx="16" cy="26" r="2" fill="currentColor"/>
+    {/* Radiating waves */}
+    <path d="M16 22c-3 0-5-2-5-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 22c3 0 5-2 5-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 18c-5 0-9-3-9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 18c5 0 9-3 9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 13c-7 0-12-4-12-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 13c7 0 12-4 12-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const eventTypeIcons: Record<string, React.ReactNode> = {
+  birthday: <BirthdayIcon />,
+  corporate: <CorporateIcon />,
+  wedding: <WeddingIcon />,
+  festival: <FestivalIcon />,
+};
 
 const eventTypes = [
-  { id: "birthday", label: "Birthday Party", icon: "🎂" },
-  { id: "corporate", label: "Corporate", icon: "💼" },
-  { id: "wedding", label: "Wedding", icon: "💍" },
-  { id: "festival", label: "Festival", icon: "🎪" },
+  { id: "birthday", label: "Birthday Party" },
+  { id: "corporate", label: "Corporate" },
+  { id: "wedding", label: "Wedding" },
+  { id: "festival", label: "Festival" },
 ];
 
 const vibes = [
@@ -59,10 +141,15 @@ export function WizardFlow() {
   const [vibe, setVibe] = useState<Vibe>(null);
   const [budget, setBudget] = useState<Budget>(null);
 
+  // Custom input values
+  const [customEventType, setCustomEventType] = useState("");
+  const [customVibe, setCustomVibe] = useState("");
+  const [customBudget, setCustomBudget] = useState("");
+
   const canProceed = () => {
-    if (currentStep === 1) return eventType !== null;
-    if (currentStep === 2) return vibe !== null;
-    if (currentStep === 3) return budget !== null;
+    if (currentStep === 1) return eventType !== null && (eventType !== "custom" || customEventType.trim() !== "");
+    if (currentStep === 2) return vibe !== null && (vibe !== "custom" || customVibe.trim() !== "");
+    if (currentStep === 3) return budget !== null && (budget !== "custom" || customBudget.trim() !== "");
     return false;
   };
 
@@ -83,6 +170,25 @@ export function WizardFlow() {
     setEventType(null);
     setVibe(null);
     setBudget(null);
+    setCustomEventType("");
+    setCustomVibe("");
+    setCustomBudget("");
+  };
+
+  // Get display labels for summary (handles custom values)
+  const getEventLabel = () => {
+    if (eventType === "custom") return customEventType;
+    return eventTypes.find((t) => t.id === eventType)?.label || "";
+  };
+
+  const getVibeLabel = () => {
+    if (vibe === "custom") return customVibe;
+    return vibes.find((v) => v.id === vibe)?.label || "";
+  };
+
+  const getBudgetLabel = () => {
+    if (budget === "custom") return customBudget;
+    return budgets.find((b) => b.id === budget)?.label || "";
   };
 
   return (
@@ -152,12 +258,40 @@ export function WizardFlow() {
                           : "none",
                     }}
                   >
-                    <div className="text-2xl md:text-3xl mb-2">{type.icon}</div>
+                    <div className="flex justify-center mb-2">{eventTypeIcons[type.id]}</div>
                     <div className="text-sm md:text-base font-bold uppercase tracking-wide">
                       {type.label}
                     </div>
                   </button>
                 ))}
+              </div>
+              {/* Custom input */}
+              <div className="mt-6">
+                <div
+                  className={`relative rounded-xl border transition-all duration-300 ${
+                    eventType === "custom"
+                      ? "border-white"
+                      : "border-white/10 hover:border-white/30"
+                  }`}
+                  style={{
+                    boxShadow:
+                      eventType === "custom"
+                        ? "0 0 30px rgba(255, 255, 255, 0.2)"
+                        : "none",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Or describe your event..."
+                    value={customEventType}
+                    onChange={(e) => {
+                      setCustomEventType(e.target.value);
+                      if (e.target.value) setEventType("custom");
+                    }}
+                    onFocus={() => setEventType("custom")}
+                    className="w-full bg-transparent text-white placeholder-white/40 px-5 py-4 rounded-xl outline-none"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -166,7 +300,7 @@ export function WizardFlow() {
           {currentStep === 2 && (
             <div>
               <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                WHAT'S THE VIBE?
+                WHAT&apos;S THE VIBE?
               </h3>
               <p className="text-white/60 text-center mb-8">
                 Choose the atmosphere you want
@@ -194,6 +328,34 @@ export function WizardFlow() {
                   </button>
                 ))}
               </div>
+              {/* Custom input */}
+              <div className="mt-6">
+                <div
+                  className={`relative rounded-2xl border transition-all duration-300 ${
+                    vibe === "custom"
+                      ? "border-white"
+                      : "border-white/10 hover:border-white/30"
+                  }`}
+                  style={{
+                    boxShadow:
+                      vibe === "custom"
+                        ? "0 0 40px rgba(255, 255, 255, 0.2)"
+                        : "none",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Or describe your vibe..."
+                    value={customVibe}
+                    onChange={(e) => {
+                      setCustomVibe(e.target.value);
+                      if (e.target.value) setVibe("custom");
+                    }}
+                    onFocus={() => setVibe("custom")}
+                    className="w-full bg-transparent text-white placeholder-white/40 px-6 py-5 rounded-2xl outline-none text-lg"
+                  />
+                </div>
+              </div>
             </div>
           )}
 
@@ -201,7 +363,7 @@ export function WizardFlow() {
           {currentStep === 3 && (
             <div>
               <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                WHAT'S YOUR BUDGET?
+                WHAT&apos;S YOUR BUDGET?
               </h3>
               <p className="text-white/60 text-center mb-8">
                 Select your budget range
@@ -227,6 +389,34 @@ export function WizardFlow() {
                   </button>
                 ))}
               </div>
+              {/* Custom input */}
+              <div className="mt-6 max-w-2xl mx-auto">
+                <div
+                  className={`relative rounded-2xl border transition-all duration-300 ${
+                    budget === "custom"
+                      ? "border-white"
+                      : "border-white/10 hover:border-white/30"
+                  }`}
+                  style={{
+                    boxShadow:
+                      budget === "custom"
+                        ? "0 0 40px rgba(255, 255, 255, 0.2)"
+                        : "none",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Or enter your budget..."
+                    value={customBudget}
+                    onChange={(e) => {
+                      setCustomBudget(e.target.value);
+                      if (e.target.value) setBudget("custom");
+                    }}
+                    onFocus={() => setBudget("custom")}
+                    className="w-full bg-transparent text-white placeholder-white/40 px-8 py-6 rounded-2xl outline-none text-xl font-bold"
+                  />
+                </div>
+              </div>
             </div>
           )}
 
@@ -248,7 +438,7 @@ export function WizardFlow() {
                       Event
                     </p>
                     <p className="text-white font-bold">
-                      {eventTypes.find((t) => t.id === eventType)?.label}
+                      {getEventLabel()}
                     </p>
                   </div>
                   <div>
@@ -256,7 +446,7 @@ export function WizardFlow() {
                       Vibe
                     </p>
                     <p className="text-white font-bold">
-                      {vibes.find((v) => v.id === vibe)?.label}
+                      {getVibeLabel()}
                     </p>
                   </div>
                   <div>
@@ -264,7 +454,7 @@ export function WizardFlow() {
                       Budget
                     </p>
                     <p className="text-white font-bold">
-                      {budgets.find((b) => b.id === budget)?.label}
+                      {getBudgetLabel()}
                     </p>
                   </div>
                 </div>

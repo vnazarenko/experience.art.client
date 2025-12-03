@@ -85,6 +85,12 @@ export function ExperienceQuiz() {
     location: null,
     feeling: null,
   });
+  const [customInputs, setCustomInputs] = useState<Answers>({
+    description: null,
+    energy: null,
+    location: null,
+    feeling: null,
+  });
   const [showResults, setShowResults] = useState(false);
   const [showAllQuestions] = useState(true); // Toggle to show all at once
 
@@ -93,6 +99,31 @@ export function ExperienceQuiz() {
       ...prev,
       [questionId]: value,
     }));
+    // Clear custom input when selecting an option
+    setCustomInputs((prev) => ({
+      ...prev,
+      [questionId]: null,
+    }));
+  };
+
+  const handleCustomInputChange = (questionId: string, value: string) => {
+    setCustomInputs((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }));
+    // Set the custom value as the answer if not empty
+    if (value.trim()) {
+      setAnswers((prev) => ({
+        ...prev,
+        [questionId]: value.trim(),
+      }));
+    } else {
+      // Clear answer if input is empty
+      setAnswers((prev) => ({
+        ...prev,
+        [questionId]: null,
+      }));
+    }
   };
 
   const allAnswered = Object.values(answers).every((answer) => answer !== null);
@@ -105,6 +136,12 @@ export function ExperienceQuiz() {
 
   const resetQuiz = () => {
     setAnswers({
+      description: null,
+      energy: null,
+      location: null,
+      feeling: null,
+    });
+    setCustomInputs({
       description: null,
       energy: null,
       location: null,
@@ -159,10 +196,10 @@ export function ExperienceQuiz() {
                 {questions.map((q, index) => (
                   <div
                     key={q.id}
-                    className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-8"
+                    className="bg-primary-charcoal rounded-2xl border border-white/10 p-8"
                   >
                     <div className="flex items-start gap-4 mb-6">
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                         <span className="text-white font-bold text-sm">
                           {index + 1}
                         </span>
@@ -177,14 +214,14 @@ export function ExperienceQuiz() {
                         <button
                           key={option.value}
                           onClick={() => handleAnswer(q.id, option.value)}
-                          className={`p-4 md:p-6 rounded-2xl border transition-all duration-300 font-bold text-sm md:text-base ${
-                            answers[q.id as keyof Answers] === option.value
+                          className={`p-2 md:p-3 rounded-xl border transition-all duration-300 font-bold text-sm md:text-base ${
+                            answers[q.id as keyof Answers] === option.value && !customInputs[q.id as keyof Answers]
                               ? "bg-white text-black border-white"
                               : "bg-transparent text-white border-white/20 hover:border-white/50"
                           }`}
                           style={{
                             boxShadow:
-                              answers[q.id as keyof Answers] === option.value
+                              answers[q.id as keyof Answers] === option.value && !customInputs[q.id as keyof Answers]
                                 ? "0 0 30px rgba(255, 255, 255, 0.15)"
                                 : "none",
                           }}
@@ -192,6 +229,26 @@ export function ExperienceQuiz() {
                           {option.label}
                         </button>
                       ))}
+                    </div>
+
+                    {/* Custom Input */}
+                    <div className="mt-4">
+                      <input
+                        type="text"
+                        placeholder="Or type your own answer..."
+                        value={customInputs[q.id as keyof Answers] || ""}
+                        onChange={(e) => handleCustomInputChange(q.id, e.target.value)}
+                        className={`w-full bg-transparent text-white placeholder-white/40 px-4 py-3 rounded-xl border transition-all duration-300 outline-none ${
+                          customInputs[q.id as keyof Answers]
+                            ? "border-white"
+                            : "border-white/10 hover:border-white/30 focus:border-white"
+                        }`}
+                        style={{
+                          boxShadow: customInputs[q.id as keyof Answers]
+                            ? "0 0 20px rgba(255, 255, 255, 0.1)"
+                            : "none",
+                        }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -229,30 +286,32 @@ export function ExperienceQuiz() {
                 YOUR PERFECT MATCHES
               </h2>
               <p className="text-white/60 text-lg">
-                Based on your quiz answers, here's what we recommend
+                Based on your quiz answers, here&apos;s what we recommend
               </p>
             </div>
 
             {/* Quiz Summary */}
-            <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6 mb-12">
+            <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 mb-12">
               <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-4">
                 Your Selections
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {questions.map((q) => (
-                  <div key={q.id}>
-                    <p className="text-white/60 text-xs uppercase tracking-widest mb-1">
-                      {q.question.split(" ")[0]}
-                    </p>
-                    <p className="text-white font-bold">
-                      {
-                        q.options.find(
-                          (opt) => opt.value === answers[q.id as keyof Answers]
-                        )?.label
-                      }
-                    </p>
-                  </div>
-                ))}
+                {questions.map((q) => {
+                  const answer = answers[q.id as keyof Answers];
+                  const matchedOption = q.options.find((opt) => opt.value === answer);
+                  const displayValue = matchedOption?.label || answer;
+
+                  return (
+                    <div key={q.id}>
+                      <p className="text-white/60 text-xs uppercase tracking-widest mb-1">
+                        {q.question.split(" ")[0]}
+                      </p>
+                      <p className="text-white font-bold">
+                        {displayValue}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -261,7 +320,7 @@ export function ExperienceQuiz() {
               {mockResults.map((result, index) => (
                 <div
                   key={result.id}
-                  className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group relative"
+                  className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group relative"
                   style={{
                     boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
                   }}

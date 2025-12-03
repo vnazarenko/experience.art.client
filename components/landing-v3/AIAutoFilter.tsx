@@ -64,10 +64,31 @@ export function AIAutoFilter() {
     budget: null,
     goal: null,
   });
+  const [customInputs, setCustomInputs] = useState<Answers>({
+    people: null,
+    venue: null,
+    budget: null,
+    goal: null,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   const questionOrder: Question[] = ["people", "venue", "budget", "goal"];
+
+  const handleCustomInputChange = (value: string) => {
+    setCustomInputs((prev) => ({ ...prev, [currentQuestion]: value }));
+    // Clear the selected option when typing custom input
+    if (value) {
+      setAnswers((prev) => ({ ...prev, [currentQuestion]: null }));
+    }
+  };
+
+  const handleCustomSubmit = () => {
+    const customValue = customInputs[currentQuestion];
+    if (customValue && customValue.trim()) {
+      handleAnswer(customValue.trim());
+    }
+  };
 
   const handleAnswer = (answer: string) => {
     const newAnswers = { ...answers, [currentQuestion]: answer };
@@ -94,6 +115,12 @@ export function AIAutoFilter() {
   const resetModal = () => {
     setCurrentQuestion("people");
     setAnswers({
+      people: null,
+      venue: null,
+      budget: null,
+      goal: null,
+    });
+    setCustomInputs({
       people: null,
       venue: null,
       budget: null,
@@ -141,7 +168,7 @@ export function AIAutoFilter() {
 
             {/* Features */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-              <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6">
+              <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6">
                 <div className="text-3xl mb-3">⚡</div>
                 <h3 className="text-white font-bold mb-2 uppercase tracking-wide">
                   Fast
@@ -150,7 +177,7 @@ export function AIAutoFilter() {
                   Get recommendations in seconds
                 </p>
               </div>
-              <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6">
+              <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6">
                 <div className="text-3xl mb-3">🎯</div>
                 <h3 className="text-white font-bold mb-2 uppercase tracking-wide">
                   Accurate
@@ -159,7 +186,7 @@ export function AIAutoFilter() {
                   Tailored to your needs
                 </p>
               </div>
-              <div className="bg-[#1a1a1a] rounded-2xl border border-white/10 p-6">
+              <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6">
                 <div className="text-3xl mb-3">✨</div>
                 <h3 className="text-white font-bold mb-2 uppercase tracking-wide">
                   Smart
@@ -175,9 +202,9 @@ export function AIAutoFilter() {
         {/* Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-[#1a1a1a] rounded-2xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-primary-charcoal rounded-2xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               {/* Modal Header */}
-              <div className="sticky top-0 bg-[#1a1a1a] border-b border-white/10 p-6 flex items-center justify-between">
+              <div className="sticky top-0 bg-primary-charcoal border-b border-white/10 p-6 flex items-center justify-between">
                 <h3 className="text-white font-bold uppercase tracking-widest">
                   AI Matchmaking
                 </h3>
@@ -232,12 +259,44 @@ export function AIAutoFilter() {
                       {questions[currentQuestion].options.map((option) => (
                         <button
                           key={option}
-                          onClick={() => handleAnswer(option)}
+                          onClick={() => {
+                            setCustomInputs((prev) => ({ ...prev, [currentQuestion]: null }));
+                            handleAnswer(option);
+                          }}
                           className="p-6 rounded-2xl border border-white/10 bg-transparent text-white hover:border-white hover:bg-white hover:text-black transition-all duration-300 font-bold text-lg"
                         >
                           {option}
                         </button>
                       ))}
+                    </div>
+
+                    {/* Custom Input */}
+                    <div className="mt-6">
+                      <div className="flex gap-3">
+                        <input
+                          type="text"
+                          placeholder="Or type your own answer..."
+                          value={customInputs[currentQuestion] || ""}
+                          onChange={(e) => handleCustomInputChange(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && customInputs[currentQuestion]?.trim()) {
+                              handleCustomSubmit();
+                            }
+                          }}
+                          className="flex-1 bg-transparent text-white placeholder-white/40 px-5 py-4 rounded-xl border border-white/10 hover:border-white/30 focus:border-white outline-none transition-all duration-300"
+                        />
+                        <button
+                          onClick={handleCustomSubmit}
+                          disabled={!customInputs[currentQuestion]?.trim()}
+                          className={`px-6 py-4 rounded-xl font-bold uppercase tracking-wide transition-all duration-300 ${
+                            customInputs[currentQuestion]?.trim()
+                              ? "bg-white text-black hover:bg-white/90"
+                              : "bg-white/10 text-white/30 cursor-not-allowed"
+                          }`}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </div>
 
                     {/* Back Button */}
