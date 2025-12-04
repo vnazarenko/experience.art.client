@@ -9,6 +9,31 @@ type Tag = {
   category: string;
 };
 
+type Experience = {
+  name: string;
+  url: string;
+  main_photo_url: string;
+  match_count: number;
+  matched_tags: {
+    visual: string[];
+    atmosphere: string[];
+    color: string[];
+  };
+  is_full_match: boolean;
+};
+
+type ExperienceSearchResponse = {
+  experiences: Experience[];
+  metadata: {
+    total_results: number;
+    search_tags: {
+      visual: string[];
+      atmosphere: string[];
+      color: string[];
+    };
+  };
+};
+
 const visualStyles: Tag[] = [
   { id: "neon", label: "Neon", category: "visual" },
   { id: "cyber", label: "Cyber", category: "visual" },
@@ -35,16 +60,12 @@ const colorVibes: Tag[] = [
   { id: "pastel", label: "Pastel", category: "color" },
 ];
 
-const mockExperiences = [
-  { id: 1, name: "Neon Dreams Installation", matches: 3 },
-  { id: 2, name: "Cyberpunk DJ Experience", matches: 2 },
-  { id: 3, name: "Holographic Dance Floor", matches: 3 },
-  { id: 4, name: "LED Art Sculpture", matches: 2 },
-];
 
 export function MoodboardPicker() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showExperiences, setShowExperiences] = useState(false);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Custom input states for each category
   const [customVisualStyle, setCustomVisualStyle] = useState("");
@@ -69,10 +90,50 @@ export function MoodboardPicker() {
     setCustomAtmosphere("");
     setCustomColorVibe("");
     setShowExperiences(false);
+    setExperiences([]);
   };
 
-  const handleShowExperiences = () => {
-    setShowExperiences(true);
+  const handleShowExperiences = async () => {
+    // Build tags object grouped by category
+    const allTags = [...visualStyles, ...atmospheres, ...colorVibes];
+    const tags: { visual: string[]; atmosphere: string[]; color: string[] } = {
+      visual: [],
+      atmosphere: [],
+      color: [],
+    };
+
+    selectedTags.forEach((tagId) => {
+      const tag = allTags.find((t) => t.id === tagId);
+      if (tag) {
+        if (tag.category === "visual") {
+          tags.visual.push(tag.id);
+        } else if (tag.category === "atmosphere") {
+          tags.atmosphere.push(tag.id);
+        } else if (tag.category === "color") {
+          tags.color.push(tag.id);
+        }
+      }
+    });
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/experience_searches/by_tags`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tags }),
+      });
+
+      const data: ExperienceSearchResponse = await response.json();
+      console.log("Experience search response:", data);
+      setExperiences(data.experiences);
+      setShowExperiences(true);
+    } catch (error) {
+      console.error("Error fetching experiences:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Check if user has any selection (tags or custom inputs)
@@ -86,7 +147,6 @@ export function MoodboardPicker() {
     return allTags.find((t) => t.id === tagId)?.label || tagId;
   };
 
-  const matchCount = selectedTags.length > 0 ? mockExperiences.length : 0;
 
   return (
     <SectionContainer background="black" className="py-24">
@@ -249,48 +309,77 @@ export function MoodboardPicker() {
         <div className="flex justify-center mt-12">
           <button
             onClick={handleShowExperiences}
-            disabled={!hasAnySelection}
+            disabled={!hasAnySelection || isLoading}
             className={`px-12 py-4 rounded-full font-bold uppercase tracking-widest text-lg transition-all duration-300 ${
-              hasAnySelection
+              hasAnySelection && !isLoading
                 ? "bg-white text-black hover:bg-white/90"
                 : "bg-white/20 text-white/40 cursor-not-allowed"
             }`}
           >
-            Show Experiences {hasAnySelection && `(${matchCount})`}
+            {isLoading ? "Loading..." : "Show Experiences"}
           </button>
         </div>
 
         {/* Results Preview - Only shown after clicking button */}
-        {showExperiences && hasAnySelection && (
+        {showExperiences && (
           <div className="mt-16">
             <h3 className="text-white text-2xl font-bold uppercase tracking-widest mb-8 text-center">
-              Matched Experiences
+              Matched Experiences ({experiences.length})
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {mockExperiences.map((exp) => (
-                <div
-                  key={exp.id}
-                  className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group"
-                  style={{
-                    boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow =
-                      "0 0 40px rgba(255, 255, 255, 0.1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow =
-                      "0 0 20px rgba(255, 255, 255, 0.05)";
-                  }}
-                >
-                  <div className="aspect-square bg-white/5 rounded-lg mb-4" />
-                  <h4 className="text-white font-bold mb-2">{exp.name}</h4>
-                  <p className="text-white/60 text-sm">
-                    {exp.matches} tags match
-                  </p>
-                </div>
-              ))}
-            </div>
+            {experiences.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {experiences.map((exp) => (
+                  <a
+                    key={exp.url}
+                    href={exp.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 group block"
+                    style={{
+                      boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow =
+                        "0 0 40px rgba(255, 255, 255, 0.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow =
+                        "0 0 20px rgba(255, 255, 255, 0.05)";
+                    }}
+                  >
+                    <div className="aspect-square bg-white/5 rounded-lg mb-4 overflow-hidden">
+                      {exp.main_photo_url && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={exp.main_photo_url}
+                          alt={exp.name}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <h4 className="text-white font-bold mb-2">{exp.name}</h4>
+                    <p className="text-white/60 text-sm mb-2">
+                      {exp.match_count} tags match
+                      {exp.is_full_match && (
+                        <span className="ml-2 text-green-400">Full match</span>
+                      )}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {[...exp.matched_tags.visual, ...exp.matched_tags.atmosphere, ...exp.matched_tags.color].map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 rounded-full bg-white/10 text-white/70 text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="text-white/60 text-center">No experiences found matching your selection.</p>
+            )}
           </div>
         )}
       </div>

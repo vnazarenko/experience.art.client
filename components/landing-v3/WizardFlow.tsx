@@ -1,161 +1,204 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SectionContainer } from "../landing-shared/SectionContainer";
 
-type EventType = "birthday" | "corporate" | "wedding" | "festival" | "custom" | null;
-type Vibe =
-  | "wow"
-  | "futuristic"
-  | "art"
-  | "epic"
-  | "calm"
-  | "interactive"
-  | "custom"
-  | null;
-type Budget = "under1k" | "1k-5k" | "5k-20k" | "20k+" | "custom" | null;
-
-// Custom SVG icons for event types - Abstract-emotional design approach
-
-// Champagne Toast - elegant adult celebration
-const BirthdayIcon = () => (
-  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
-    {/* Left glass */}
-    <path d="M8 28l4-14 2 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <ellipse cx="11" cy="11" rx="3" ry="4" stroke="currentColor" strokeWidth="2"/>
-    {/* Right glass */}
-    <path d="M24 28l-4-14-2 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <ellipse cx="21" cy="11" rx="3" ry="4" stroke="currentColor" strokeWidth="2"/>
-    {/* Bubbles */}
-    <circle cx="16" cy="6" r="1.5" fill="currentColor"/>
-    <circle cx="14" cy="3" r="1" fill="currentColor"/>
-    <circle cx="18" cy="4" r="1" fill="currentColor"/>
-  </svg>
-);
-
-// Network Nodes - modern professional connections
-const CorporateIcon = () => (
-  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
-    {/* Central node */}
-    <circle cx="16" cy="16" r="3" stroke="currentColor" strokeWidth="2"/>
-    {/* Surrounding nodes */}
-    <circle cx="16" cy="5" r="2" stroke="currentColor" strokeWidth="2"/>
-    <circle cx="25" cy="10" r="2" stroke="currentColor" strokeWidth="2"/>
-    <circle cx="25" cy="22" r="2" stroke="currentColor" strokeWidth="2"/>
-    <circle cx="16" cy="27" r="2" stroke="currentColor" strokeWidth="2"/>
-    <circle cx="7" cy="22" r="2" stroke="currentColor" strokeWidth="2"/>
-    <circle cx="7" cy="10" r="2" stroke="currentColor" strokeWidth="2"/>
-    {/* Connection lines */}
-    <path d="M16 7v6M23 11l-5 3M23 21l-5-3M16 25v-6M9 21l5-3M9 11l5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
-);
-
-// Intertwined Forms - romantic union, infinity-inspired
-const WeddingIcon = () => (
-  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
-    {/* Intertwined flowing curves - infinity/union symbol */}
-    <path
-      d="M6 16c0-4 3-7 6-7s5 2 5 5-2 5-5 5c-2 0-4-1-5-3"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-    <path
-      d="M26 16c0 4-3 7-6 7s-5-2-5-5 2-5 5-5c2 0 4 1 5 3"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-    {/* Small heart accent at center */}
-    <path
-      d="M16 14l-1.5-1.5a1.5 1.5 0 112.1 0L16 14l1.4-1.5a1.5 1.5 0 10-2.1 0L16 14z"
-      fill="currentColor"
-    />
-  </svg>
-);
-
-// Radiating Sound Waves - collective energy, immersive experience
-const FestivalIcon = () => (
-  <svg viewBox="0 0 32 32" fill="none" className="w-8 h-8 md:w-10 md:h-10">
-    {/* Base point */}
-    <circle cx="16" cy="26" r="2" fill="currentColor"/>
-    {/* Radiating waves */}
-    <path d="M16 22c-3 0-5-2-5-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M16 22c3 0 5-2 5-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M16 18c-5 0-9-3-9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M16 18c5 0 9-3 9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M16 13c-7 0-12-4-12-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M16 13c7 0 12-4 12-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-);
-
-const eventTypeIcons: Record<string, React.ReactNode> = {
-  birthday: <BirthdayIcon />,
-  corporate: <CorporateIcon />,
-  wedding: <WeddingIcon />,
-  festival: <FestivalIcon />,
+// API Types
+type QuestionOption = {
+  display: string;
+  minimized: string;
 };
 
-const eventTypes = [
-  { id: "birthday", label: "Birthday Party" },
-  { id: "corporate", label: "Corporate" },
-  { id: "wedding", label: "Wedding" },
-  { id: "festival", label: "Festival" },
-];
+type Question = {
+  question_id: string;
+  question_text: string;
+  question_type: "single_select" | "multi_select";
+  options: QuestionOption[];
+  allow_other: boolean;
+  other_prompt: string;
+  required: boolean;
+  position: number;
+};
 
-const vibes = [
-  { id: "wow", label: "WOW Factor" },
-  { id: "futuristic", label: "Futuristic" },
-  { id: "art", label: "Art Installation" },
-  { id: "epic", label: "Epic Show" },
-  { id: "calm", label: "Calm/Elegant" },
-  { id: "interactive", label: "Interactive" },
-];
+type QuestionsResponse = {
+  questions: Question[];
+};
 
-const budgets = [
-  { id: "under1k", label: "Under $1,000" },
-  { id: "1k-5k", label: "$1,000–$5,000" },
-  { id: "5k-20k", label: "$5,000–$20,000" },
-  { id: "20k+", label: "$20,000+" },
-];
+type Experience = {
+  name: string;
+  url: string;
+  main_photo_url?: string;
+  similarity_score: number;
+  similarity_distance: number;
+};
 
-const mockExperiences = [
-  { id: 1, name: "Laser Sculpture Show", type: "Performance", price: "$3,500" },
-  {
-    id: 2,
-    name: "Interactive LED Floor",
-    type: "Installation",
-    price: "$2,800",
-  },
-  {
-    id: 3,
-    name: "Holographic DJ Booth",
-    type: "Tech Experience",
-    price: "$4,200",
-  },
-];
+type SearchResponse = {
+  experiences: Experience[];
+  metadata: {
+    total_results: number;
+    client_summary: string;
+  };
+};
+
+type Answers = Record<string, string | string[]>;
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function WizardFlow() {
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentStep, setCurrentStep] = useState(1);
-  const [eventType, setEventType] = useState<EventType>(null);
-  const [vibe, setVibe] = useState<Vibe>(null);
-  const [budget, setBudget] = useState<Budget>(null);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  // const [clientSummary, setClientSummary] = useState("");
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Custom input values
-  const [customEventType, setCustomEventType] = useState("");
-  const [customVibe, setCustomVibe] = useState("");
-  const [customBudget, setCustomBudget] = useState("");
+  // Fetch questions on mount
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/v1/experience_searches/questions`);
+        const data: QuestionsResponse = await response.json();
+        // Sort by position
+        const sortedQuestions = data.questions.sort((a, b) => a.position - b.position);
+        setQuestions(sortedQuestions);
+        console.log("Questions loaded:", data);
+      } catch (err) {
+        console.error("Error fetching questions:", err);
+        setError("Failed to load questions. Please try again later.");
+      } finally {
+        setIsLoadingQuestions(false);
+      }
+    };
 
-  const canProceed = () => {
-    if (currentStep === 1) return eventType !== null && (eventType !== "custom" || customEventType.trim() !== "");
-    if (currentStep === 2) return vibe !== null && (vibe !== "custom" || customVibe.trim() !== "");
-    if (currentStep === 3) return budget !== null && (budget !== "custom" || customBudget.trim() !== "");
-    return false;
+    fetchQuestions();
+  }, []);
+
+  const totalSteps = questions.length + 1; // questions + results step
+
+  const currentQuestion = questions[currentStep - 1];
+
+  const handleSelectOption = (questionId: string, optionDisplay: string, isMultiSelect: boolean) => {
+    setAnswers((prev) => {
+      if (isMultiSelect) {
+        const currentAnswers = (prev[questionId] as string[]) || [];
+        if (currentAnswers.includes(optionDisplay)) {
+          return {
+            ...prev,
+            [questionId]: currentAnswers.filter((a) => a !== optionDisplay),
+          };
+        } else {
+          return {
+            ...prev,
+            [questionId]: [...currentAnswers, optionDisplay],
+          };
+        }
+      } else {
+        // Clear custom input when selecting a predefined option
+        setCustomInputs((prevCustom) => ({ ...prevCustom, [questionId]: "" }));
+        return {
+          ...prev,
+          [questionId]: optionDisplay,
+        };
+      }
+    });
   };
 
-  const handleNext = () => {
-    if (canProceed() && currentStep < 4) {
+  const handleCustomInput = (questionId: string, value: string, isMultiSelect: boolean) => {
+    setCustomInputs((prev) => ({ ...prev, [questionId]: value }));
+    if (value) {
+      if (isMultiSelect) {
+        // For multi-select, we'll add the custom value on blur or submit
+      } else {
+        setAnswers((prev) => ({ ...prev, [questionId]: value }));
+      }
+    }
+  };
+
+  const canProceed = () => {
+    if (!currentQuestion) return false;
+    const answer = answers[currentQuestion.question_id];
+    const customInput = customInputs[currentQuestion.question_id];
+
+    if (!currentQuestion.required) return true;
+
+    if (currentQuestion.question_type === "multi_select") {
+      const selectedAnswers = (answer as string[]) || [];
+      return selectedAnswers.length > 0 || (customInput && customInput.trim() !== "");
+    } else {
+      return (answer && answer !== "") || (customInput && customInput.trim() !== "");
+    }
+  };
+
+  const handleNext = async () => {
+    if (!canProceed()) return;
+
+    // Add custom input to answers if present for multi-select
+    if (currentQuestion && currentQuestion.question_type === "multi_select") {
+      const customValue = customInputs[currentQuestion.question_id];
+      if (customValue && customValue.trim()) {
+        setAnswers((prev) => {
+          const currentAnswers = (prev[currentQuestion.question_id] as string[]) || [];
+          if (!currentAnswers.includes(customValue.trim())) {
+            return {
+              ...prev,
+              [currentQuestion.question_id]: [...currentAnswers, customValue.trim()],
+            };
+          }
+          return prev;
+        });
+      }
+    }
+
+    if (currentStep < totalSteps) {
+      if (currentStep === questions.length) {
+        // Last question step - submit answers and fetch results
+        await fetchResults();
+      }
       setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const fetchResults = async () => {
+    setIsLoadingResults(true);
+    try {
+      // Build final answers object
+      const finalAnswers: Answers = { ...answers };
+
+      // Add any remaining custom inputs for multi-select
+      questions.forEach((q) => {
+        const customValue = customInputs[q.question_id];
+        if (q.question_type === "multi_select" && customValue && customValue.trim()) {
+          const currentAnswers = (finalAnswers[q.question_id] as string[]) || [];
+          if (!currentAnswers.includes(customValue.trim())) {
+            finalAnswers[q.question_id] = [...currentAnswers, customValue.trim()];
+          }
+        } else if (q.question_type === "single_select" && customValue && customValue.trim()) {
+          finalAnswers[q.question_id] = customValue.trim();
+        }
+      });
+
+      console.log("Submitting answers:", finalAnswers);
+
+      const response = await fetch(`${BASE_URL}/api/v1/experience_searches/by_vector`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ answers: finalAnswers }),
+      });
+
+      const data: SearchResponse = await response.json();
+      console.log("Search results:", data);
+      setExperiences(data.experiences);
+      // setClientSummary(data.metadata.client_summary);
+    } catch (err) {
+      console.error("Error fetching results:", err);
+      setError("Failed to fetch results. Please try again.");
+    } finally {
+      setIsLoadingResults(false);
     }
   };
 
@@ -167,29 +210,57 @@ export function WizardFlow() {
 
   const resetWizard = () => {
     setCurrentStep(1);
-    setEventType(null);
-    setVibe(null);
-    setBudget(null);
-    setCustomEventType("");
-    setCustomVibe("");
-    setCustomBudget("");
+    setAnswers({});
+    setCustomInputs({});
+    setExperiences([]);
+    // setClientSummary("");
+    setError(null);
   };
 
-  // Get display labels for summary (handles custom values)
-  const getEventLabel = () => {
-    if (eventType === "custom") return customEventType;
-    return eventTypes.find((t) => t.id === eventType)?.label || "";
+  const isOptionSelected = (questionId: string, optionDisplay: string, isMultiSelect: boolean) => {
+    const answer = answers[questionId];
+    if (isMultiSelect) {
+      return ((answer as string[]) || []).includes(optionDisplay);
+    }
+    return answer === optionDisplay;
   };
 
-  const getVibeLabel = () => {
-    if (vibe === "custom") return customVibe;
-    return vibes.find((v) => v.id === vibe)?.label || "";
+  const isCustomInputActive = (questionId: string) => {
+    const customValue = customInputs[questionId];
+    return customValue && customValue.trim() !== "";
   };
 
-  const getBudgetLabel = () => {
-    if (budget === "custom") return customBudget;
-    return budgets.find((b) => b.id === budget)?.label || "";
-  };
+  if (isLoadingQuestions) {
+    return (
+      <SectionContainer background="black" className="py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            FIND YOUR EXPERIENCE
+          </h2>
+          <p className="text-white/60 text-lg">Loading questions...</p>
+        </div>
+      </SectionContainer>
+    );
+  }
+
+  if (error && questions.length === 0) {
+    return (
+      <SectionContainer background="black" className="py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            FIND YOUR EXPERIENCE
+          </h2>
+          <p className="text-red-400 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 px-8 py-3 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300 font-bold uppercase tracking-wide"
+          >
+            Retry
+          </button>
+        </div>
+      </SectionContainer>
+    );
+  }
 
   return (
     <SectionContainer background="black" className="py-24">
@@ -200,13 +271,13 @@ export function WizardFlow() {
             FIND YOUR EXPERIENCE
           </h2>
           <p className="text-white/60 text-lg">
-            Answer 3 quick questions to get matched
+            Answer {questions.length} quick questions to get matched
           </p>
         </div>
 
         {/* Step Indicator */}
         <div className="flex items-center justify-center mb-12">
-          {[1, 2, 3, 4].map((step) => (
+          {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
             <div key={step} className="flex items-center">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
@@ -219,9 +290,9 @@ export function WizardFlow() {
               >
                 {step}
               </div>
-              {step < 4 && (
+              {step < totalSteps && (
                 <div
-                  className={`w-16 h-0.5 mx-2 transition-all duration-300 ${
+                  className={`w-12 h-0.5 mx-1 transition-all duration-300 ${
                     currentStep > step ? "bg-white/30" : "bg-white/10"
                   }`}
                 />
@@ -232,271 +303,168 @@ export function WizardFlow() {
 
         {/* Step Content */}
         <div className="min-h-[400px] h-min">
-          {/* Step 1: Event Type */}
-          {currentStep === 1 && (
+          {/* Question Steps */}
+          {currentStep <= questions.length && currentQuestion && (
             <div>
               <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                WHAT TYPE OF EVENT?
+                {currentQuestion.question_text.toUpperCase()}
               </h3>
               <p className="text-white/60 text-center mb-8">
-                Select your event type
+                {currentQuestion.question_type === "multi_select"
+                  ? "Select all that apply"
+                  : "Select one option"}
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                {eventTypes.map((type) => (
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentQuestion.options.map((option) => (
                   <button
-                    key={type.id}
-                    onClick={() => setEventType(type.id as EventType)}
-                    className={`p-4 md:p-5 rounded-xl border transition-all duration-300 text-center ${
-                      eventType === type.id
+                    key={option.display}
+                    onClick={() =>
+                      handleSelectOption(
+                        currentQuestion.question_id,
+                        option.display,
+                        currentQuestion.question_type === "multi_select"
+                      )
+                    }
+                    className={`p-5 rounded-xl border transition-all duration-300 text-left ${
+                      isOptionSelected(
+                        currentQuestion.question_id,
+                        option.display,
+                        currentQuestion.question_type === "multi_select"
+                      )
                         ? "bg-white text-black border-white"
                         : "bg-primary-charcoal text-white border-white/10 hover:border-white/30"
                     }`}
                     style={{
-                      boxShadow:
-                        eventType === type.id
-                          ? "0 0 30px rgba(255, 255, 255, 0.2)"
-                          : "none",
-                    }}
-                  >
-                    <div className="flex justify-center mb-2">{eventTypeIcons[type.id]}</div>
-                    <div className="text-sm md:text-base font-bold uppercase tracking-wide">
-                      {type.label}
-                    </div>
-                  </button>
-                ))}
-              </div>
-              {/* Custom input */}
-              <div className="mt-6">
-                <div
-                  className={`relative rounded-xl border transition-all duration-300 ${
-                    eventType === "custom"
-                      ? "border-white"
-                      : "border-white/10 hover:border-white/30"
-                  }`}
-                  style={{
-                    boxShadow:
-                      eventType === "custom"
+                      boxShadow: isOptionSelected(
+                        currentQuestion.question_id,
+                        option.display,
+                        currentQuestion.question_type === "multi_select"
+                      )
                         ? "0 0 30px rgba(255, 255, 255, 0.2)"
                         : "none",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Or describe your event..."
-                    value={customEventType}
-                    onChange={(e) => {
-                      setCustomEventType(e.target.value);
-                      if (e.target.value) setEventType("custom");
-                    }}
-                    onFocus={() => setEventType("custom")}
-                    className="w-full bg-transparent text-white placeholder-white/40 px-5 py-4 rounded-xl outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Vibe */}
-          {currentStep === 2 && (
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                WHAT&apos;S THE VIBE?
-              </h3>
-              <p className="text-white/60 text-center mb-8">
-                Choose the atmosphere you want
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {vibes.map((v) => (
-                  <button
-                    key={v.id}
-                    onClick={() => setVibe(v.id as Vibe)}
-                    className={`p-6 rounded-2xl border transition-all duration-300 ${
-                      vibe === v.id
-                        ? "bg-white text-black border-white"
-                        : "bg-primary-charcoal text-white border-white/10 hover:border-white/30"
-                    }`}
-                    style={{
-                      boxShadow:
-                        vibe === v.id
-                          ? "0 0 40px rgba(255, 255, 255, 0.2)"
-                          : "none",
                     }}
                   >
-                    <div className="text-lg font-bold uppercase tracking-wide">
-                      {v.label}
-                    </div>
+                    <div className="text-base font-bold">{option.display}</div>
                   </button>
                 ))}
               </div>
-              {/* Custom input */}
-              <div className="mt-6">
-                <div
-                  className={`relative rounded-2xl border transition-all duration-300 ${
-                    vibe === "custom"
-                      ? "border-white"
-                      : "border-white/10 hover:border-white/30"
-                  }`}
-                  style={{
-                    boxShadow:
-                      vibe === "custom"
-                        ? "0 0 40px rgba(255, 255, 255, 0.2)"
-                        : "none",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Or describe your vibe..."
-                    value={customVibe}
-                    onChange={(e) => {
-                      setCustomVibe(e.target.value);
-                      if (e.target.value) setVibe("custom");
-                    }}
-                    onFocus={() => setVibe("custom")}
-                    className="w-full bg-transparent text-white placeholder-white/40 px-6 py-5 rounded-2xl outline-none text-lg"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Step 3: Budget */}
-          {currentStep === 3 && (
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                WHAT&apos;S YOUR BUDGET?
-              </h3>
-              <p className="text-white/60 text-center mb-8">
-                Select your budget range
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                {budgets.map((b) => (
-                  <button
-                    key={b.id}
-                    onClick={() => setBudget(b.id as Budget)}
-                    className={`p-8 rounded-2xl border transition-all duration-300 ${
-                      budget === b.id
-                        ? "bg-white text-black border-white"
-                        : "bg-primary-charcoal text-white border-white/10 hover:border-white/30"
+              {/* Custom input for "Other" option */}
+              {currentQuestion.allow_other && (
+                <div className="mt-6">
+                  <div
+                    className={`relative rounded-xl border transition-all duration-300 ${
+                      isCustomInputActive(currentQuestion.question_id)
+                        ? "border-white"
+                        : "border-white/10 hover:border-white/30"
                     }`}
                     style={{
-                      boxShadow:
-                        budget === b.id
-                          ? "0 0 40px rgba(255, 255, 255, 0.2)"
-                          : "none",
+                      boxShadow: isCustomInputActive(currentQuestion.question_id)
+                        ? "0 0 30px rgba(255, 255, 255, 0.2)"
+                        : "none",
                     }}
                   >
-                    <div className="text-2xl font-bold">{b.label}</div>
-                  </button>
-                ))}
-              </div>
-              {/* Custom input */}
-              <div className="mt-6 max-w-2xl mx-auto">
-                <div
-                  className={`relative rounded-2xl border transition-all duration-300 ${
-                    budget === "custom"
-                      ? "border-white"
-                      : "border-white/10 hover:border-white/30"
-                  }`}
-                  style={{
-                    boxShadow:
-                      budget === "custom"
-                        ? "0 0 40px rgba(255, 255, 255, 0.2)"
-                        : "none",
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Or enter your budget..."
-                    value={customBudget}
-                    onChange={(e) => {
-                      setCustomBudget(e.target.value);
-                      if (e.target.value) setBudget("custom");
-                    }}
-                    onFocus={() => setBudget("custom")}
-                    className="w-full bg-transparent text-white placeholder-white/40 px-8 py-6 rounded-2xl outline-none text-xl font-bold"
-                  />
+                    <input
+                      type="text"
+                      placeholder={currentQuestion.other_prompt || "Or describe your own..."}
+                      value={customInputs[currentQuestion.question_id] || ""}
+                      onChange={(e) =>
+                        handleCustomInput(
+                          currentQuestion.question_id,
+                          e.target.value,
+                          currentQuestion.question_type === "multi_select"
+                        )
+                      }
+                      className="w-full bg-transparent text-white placeholder-white/40 px-5 py-4 rounded-xl outline-none"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
-          {/* Step 4: Results */}
-          {currentStep === 4 && (
+          {/* Results Step */}
+          {currentStep === totalSteps && (
             <div>
               <h3 className="text-2xl font-bold text-white mb-2 text-center">
                 YOUR MATCHED EXPERIENCES
               </h3>
               <p className="text-white/60 text-center mb-8">
-                Based on your selections, here are our recommendations
+                Based on your selections, here are our top recommendations
               </p>
 
-              {/* Summary */}
-              <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 mb-8">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <p className="text-white/60 text-sm uppercase tracking-widest mb-1">
-                      Event
-                    </p>
-                    <p className="text-white font-bold">
-                      {getEventLabel()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm uppercase tracking-widest mb-1">
-                      Vibe
-                    </p>
-                    <p className="text-white font-bold">
-                      {getVibeLabel()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-white/60 text-sm uppercase tracking-widest mb-1">
-                      Budget
-                    </p>
-                    <p className="text-white font-bold">
-                      {getBudgetLabel()}
-                    </p>
-                  </div>
+              {isLoadingResults ? (
+                <div className="text-center py-12">
+                  <p className="text-white/60 text-lg">Finding your perfect experiences...</p>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Client Summary
+                  {clientSummary && (
+                    <div className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 mb-8">
+                      <p className="text-white/80 italic">&quot;{clientSummary}&quot;</p>
+                    </div>
+                  )} */}
 
-              {/* Experience Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {mockExperiences.map((exp) => (
-                  <div
-                    key={exp.id}
-                    className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300"
-                    style={{
-                      boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
-                    }}
-                  >
-                    <div className="aspect-video bg-white/5 rounded-lg mb-4" />
-                    <h4 className="text-white font-bold text-lg mb-2">
-                      {exp.name}
-                    </h4>
-                    <p className="text-white/60 text-sm mb-3">{exp.type}</p>
-                    <p className="text-white font-bold text-xl">{exp.price}</p>
+                  {/* Experience Cards */}
+                  {experiences.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                      {experiences.map((exp, index) => (
+                        <a
+                          key={exp.url}
+                          href={exp.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-primary-charcoal rounded-2xl border border-white/10 p-6 hover:border-white/30 transition-all duration-300 block"
+                          style={{
+                            boxShadow: "0 0 20px rgba(255, 255, 255, 0.05)",
+                          }}
+                        >
+                          <div className="aspect-video bg-white/5 rounded-lg mb-4 overflow-hidden">
+                            {exp.main_photo_url && (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={exp.main_photo_url}
+                                alt={exp.name}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-white/40 text-sm font-bold">#{index + 1} Match</span>
+                            <span className="text-white/60 text-sm">
+                              {Math.round(exp.similarity_score * 100)}% match
+                            </span>
+                          </div>
+                          <h4 className="text-white font-bold text-lg">
+                            {exp.name}
+                          </h4>
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <p className="text-white/60">No experiences found matching your criteria.</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={resetWizard}
+                      className="px-8 py-3 rounded-full border border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 font-bold uppercase tracking-wide"
+                    >
+                      Start Over
+                    </button>
                   </div>
-                ))}
-              </div>
-
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={resetWizard}
-                  className="px-8 py-3 rounded-full border border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 font-bold uppercase tracking-wide"
-                >
-                  Start Over
-                </button>
-                <button className="px-8 py-3 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-300 font-bold uppercase tracking-wide">
-                  View All Matches
-                </button>
-              </div>
+                </>
+              )}
             </div>
           )}
         </div>
 
         {/* Navigation */}
-        {currentStep < 4 && (
+        {currentStep < totalSteps && (
           <div className="flex justify-between mt-5">
             <button
               onClick={handleBack}
@@ -511,14 +479,18 @@ export function WizardFlow() {
             </button>
             <button
               onClick={handleNext}
-              disabled={!canProceed()}
+              disabled={!canProceed() || isLoadingResults}
               className={`px-8 py-3 rounded-full font-bold uppercase tracking-wide transition-all duration-300 ${
-                canProceed()
+                canProceed() && !isLoadingResults
                   ? "bg-white text-black hover:bg-white/90"
                   : "bg-white/20 text-white/40 cursor-not-allowed"
               }`}
             >
-              {currentStep === 3 ? "Show Results" : "Next"}
+              {isLoadingResults
+                ? "Loading..."
+                : currentStep === questions.length
+                ? "Show Results"
+                : "Next"}
             </button>
           </div>
         )}
