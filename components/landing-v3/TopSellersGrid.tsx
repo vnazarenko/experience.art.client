@@ -6,6 +6,7 @@ import Link from "next/link";
 const badges = ['Most Requested', 'Trending Now', 'Premium', null, 'Trending Now', null];
 
 interface TopSellersGridProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   experiences: any[];
 }
 
@@ -20,7 +21,7 @@ export function TopSellersGrid({ experiences }: TopSellersGridProps) {
         {experiences.map((experience, index) => (
           <Link href={`/experiences/${experience.slug}`} key={experience.id}>
             <div
-              className="bg-[#1a1a1a] rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              className="bg-primary-charcoal rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer"
               style={{
                 boxShadow: '0 0 0 rgba(0, 0, 0, 0)',
                 transition: 'all 300ms'
@@ -39,6 +40,7 @@ export function TopSellersGrid({ experiences }: TopSellersGridProps) {
               {/* Image */}
               <div className="relative aspect-square">
                 {experience.photos?.[0] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={experience.photos[0].url}
                     alt={experience.title}

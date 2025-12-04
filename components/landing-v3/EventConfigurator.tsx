@@ -12,13 +12,13 @@ export function EventConfigurator() {
   return (
     <SectionContainer background="black" className="py-16 md:py-24">
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-14">
-        WHAT'S YOUR EVENT?
+        WHAT&apos;S YOUR EVENT?
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {/* Type of Event */}
         <div
-          className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
+          className="bg-primary-charcoal border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
           style={{
             boxShadow: '0 0 0 rgba(255, 255, 255, 0)',
             transition: 'all 300ms'
@@ -47,7 +47,7 @@ export function EventConfigurator() {
 
         {/* Vibe */}
         <div
-          className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
+          className="bg-primary-charcoal border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
           style={{
             boxShadow: '0 0 0 rgba(255, 255, 255, 0)',
             transition: 'all 300ms'
@@ -76,7 +76,7 @@ export function EventConfigurator() {
 
         {/* Budget */}
         <div
-          className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
+          className="bg-primary-charcoal border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-white/30"
           style={{
             boxShadow: '0 0 0 rgba(255, 255, 255, 0)',
             transition: 'all 300ms'
