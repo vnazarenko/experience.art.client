@@ -1,6 +1,8 @@
 # config valid for current version and patch releases of Capistrano
 lock '~> 3.19.2'
 
+require 'time'
+
 set :application, 'experience-art-client'
 set :repo_url, 'git@github.com:vnazarenko/experience.art.client.git'
 
@@ -22,13 +24,21 @@ set :cache_path, ->{ File.join(shared_path, 'node_modules') }
 set :nvm_map_bins, %w{node npm pm2}
 
 namespace :npm do
-  desc 'Generate build information'
-  task :generate_build_info do
+  task :install do
     on roles(:all) do
       within release_path do
-        # Get git commit hash
-        git_commit = capture(:git, 'rev-parse', '--short', 'HEAD').strip
+        execute :npm, 'ci --omit=dev'
+      end
+    end
+  end
 
+  desc 'Generate build information'
+  task :generate_build_info do
+    # Get git commit locally before deploying
+    git_commit = `git rev-parse --short HEAD`.strip
+
+    on roles(:all) do
+      within release_path do
         # Generate build ID (timestamp + short commit)
         build_time = Time.now.utc.iso8601
         build_id = "#{Time.now.utc.strftime('%Y%m%d%H%M%S')}-#{git_commit}"
@@ -43,14 +53,6 @@ namespace :npm do
     end
   end
 
-  task :install do
-    on roles(:all) do
-      within release_path do
-        execute :npm, 'ci --omit=dev'
-      end
-    end
-  end
-
   task :build do
     on roles(:all) do
       within release_path do
@@ -59,8 +61,8 @@ namespace :npm do
     end
   end
 
-  before :build, :generate_build_info
-  after :install, :build
+  after :install, :generate_build_info
+  after :generate_build_info, :build
 end
 
 namespace :deploy do
